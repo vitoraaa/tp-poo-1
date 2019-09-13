@@ -3,15 +3,6 @@
 #include "Cliente.h"
 #include "Movimentacao.h"
 
-//Conta::Conta(Cliente _cliente)
-//{
-//
-//	numConta = proximoNumConta;
-//	proximoNumConta++;
-//	cliente = _cliente;
-//	saldo = 0;
-//}
-
 
 Conta::Conta()
 {

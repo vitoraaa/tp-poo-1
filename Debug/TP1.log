@@ -1,4 +1,3 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (TP1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-Conta.obj : error LNK2019: unresolved external symbol "public: __thiscall Cliente::Cliente(class Cliente *)" (??0Cliente@@QAE@PAV0@@Z) referenced in function "public: __thiscall Conta::Conta(class Cliente)" (??0Conta@@QAE@VCliente@@@Z)
-Conta.obj : error LNK2001: unresolved external symbol "private: static int Conta::proximoNumConta" (?proximoNumConta@Conta@@0HA)
-C:\Users\user\Desktop\POO\TP_1\TP1\Debug\TP1A.exe : fatal error LNK1120: 2 unresolved externals
+  TP1.cpp
+  TP1.vcxproj -> C:\Users\user\Desktop\POO\TP_1\TP1\Debug\TP1A.exe
