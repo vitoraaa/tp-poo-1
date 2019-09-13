@@ -12,6 +12,7 @@ private:
 
 public:
 	Movimentacao(string Descricao, char DebitoCredito, double Valor);
+	Movimentacao();
 	~Movimentacao();
 
 	string getDescricao();

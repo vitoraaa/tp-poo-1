@@ -12,6 +12,7 @@ private:
 public:
 
 	Cliente(string _nomeCliente,string _cpf_cnpj,string _endereço,string _fone);
+	Cliente();
 	~Cliente();
 
 	string getNomeCliente();

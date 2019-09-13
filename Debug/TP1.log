@@ -1,20 +1,3 @@
-﻿  pch.cpp
-  Banco.cpp
-  Cliente.cpp
-  Conta.cpp
-c:\users\user\desktop\poo\tp_1\tp1\conta.h(10): error C3646: 'cliente': unknown override specifier
-c:\users\user\desktop\poo\tp_1\tp1\conta.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-c:\users\user\desktop\poo\tp_1\tp1\conta.h(11): error C2065: 'Movimentacao': undeclared identifier
-c:\users\user\desktop\poo\tp_1\tp1\conta.h(11): error C2923: 'std::vector': 'Movimentacao' is not a valid template type argument for parameter '_Ty'
-c:\users\user\desktop\poo\tp_1\tp1\conta.h(11): error C2903: 'allocator': symbol is neither a class template nor a function template
-c:\users\user\desktop\poo\tp_1\tp1\conta.h(11): error C3203: 'allocator': unspecialized class template can't be used as a template argument for template parameter '_Alloc', expected a real type
-c:\users\user\desktop\poo\tp_1\tp1\conta.h(14): error C2061: syntax error: identifier 'Cliente'
-c:\users\user\desktop\poo\tp_1\tp1\conta.cpp(8): error C2511: 'Conta::Conta(Cliente)': overloaded member function not found in 'Conta'
-  c:\users\user\desktop\poo\tp_1\tp1\conta.h(5): note: see declaration of 'Conta'
-c:\users\user\desktop\poo\tp_1\tp1\conta.cpp(9): error C2597: illegal reference to non-static member 'Conta::saldo'
-c:\users\user\desktop\poo\tp_1\tp1\conta.cpp(10): error C2065: 'cliente': undeclared identifier
-  Interface.cpp
-  Movimentacao.cpp
-c:\users\user\desktop\poo\tp_1\tp1\movimentacao.cpp(28): error C2143: syntax error: missing ';' before '}'
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (TP1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   TP1.cpp
-  Generating Code...
+  TP1.vcxproj -> C:\Users\user\Desktop\POO\TP_1\TP1\Debug\TP1A.exe

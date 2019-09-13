@@ -2,17 +2,31 @@
 //
 
 #include "pch.h"
-#include <iostream>
+#include "Interface.h"
+#include "Banco.h"
+#include "Cliente.h"
+#include "Movimentacao.h"
+#include "Conta.h"
 
+#include <iostream>
+using namespace std;
 int main()
 {
-    std::cout << "Hello World!\n"; 
+    Interface interface;
+
+    int opcaoEscolhida = 0;
+
+    do
+    {
+        opcaoEscolhida = interface.apresentarMenu();
+        system("cls");
+    } while ((typeid(0).name() != typeid(opcaoEscolhida).name()) || opcaoEscolhida < 0 || opcaoEscolhida > 13);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
+// Tips for Getting Started:
 //   1. Use the Solution Explorer window to add/manage files
 //   2. Use the Team Explorer window to connect to source control
 //   3. Use the Output window to see build output and other messages
