@@ -9,12 +9,12 @@ class Conta
 private:
 	int numConta;
 	double saldo;
-	Cliente cliente = new Cliente;
+	Cliente cliente;
 	vector<Movimentacao> movimentacoes;
-	static int proximoNumConta;
+	int proximoNumConta;
 
 public:
-	Conta(Cliente Cliente);
+	Conta();
 	~Conta();
 
 	int getNumConta();

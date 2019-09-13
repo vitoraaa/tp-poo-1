@@ -3,18 +3,24 @@
 #include "Cliente.h"
 #include "Movimentacao.h"
 
-Conta::Conta(Cliente _cliente)
+//Conta::Conta(Cliente _cliente)
+//{
+//
+//	numConta = proximoNumConta;
+//	proximoNumConta++;
+//	cliente = _cliente;
+//	saldo = 0;
+//}
+
+
+Conta::Conta()
 {
-
-	numConta = proximoNumConta;
-	proximoNumConta++;
-	cliente = _cliente;
-	saldo = 0;
+	
 }
-
 Conta::~Conta()
 {
 }
+
 
 int Conta::getNumConta()
 {
@@ -26,7 +32,8 @@ double Conta::getSaldo()
 }
 Cliente Conta::getCliente()
 {
-	Cliente cliente = new Cliente;
+	Cliente cliente;
+
 	return cliente;
 }
 vector<Movimentacao> Conta::getMovimentacoes()

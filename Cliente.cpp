@@ -9,12 +9,15 @@ Cliente::Cliente(string _nomeCliente, string _cpf_cnpj, string _endereco, string
 	fone = _fone;
 }
 
-Cliente::~Cliente()
-{
-}
+
 Cliente::Cliente()
 {
 }
+
+Cliente::~Cliente()
+{
+}
+
 
 
 string Cliente::getNomeCliente()
