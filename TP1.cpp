@@ -3,10 +3,10 @@
 
 #include "pch.h"
 #include "Interface.h"
-#include "Banco.h"
 #include "Cliente.h"
 #include "Movimentacao.h"
 #include "Conta.h"
+#include "Banco.h"
 
 #include <iostream>
 using namespace std;

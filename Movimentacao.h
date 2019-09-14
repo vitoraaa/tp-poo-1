@@ -1,5 +1,5 @@
 #pragma once
-#include<time.h>
+#include <time.h>
 #include <string>
 using namespace std;
 class Movimentacao

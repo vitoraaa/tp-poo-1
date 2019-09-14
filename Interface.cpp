@@ -36,6 +36,19 @@ int Interface::apresentarMenu()
 }
 void Interface::cadastrarCliente()
 {
+  string nome;
+  string endereco;
+  string cpf_cnpj;
+  string fone;
+  std::cout<< "Cadastro de novo cliente\n"
+  std::cout<< "Insira o nome do cliente\n"
+  std:cin >> nome;
+  std::cout<< "Insira o endereco do cliente\n"
+  std:cin >> endereco;
+  std::cout<< "Insira o CPF ou CNPJ do cliente\n"
+  std:cin >> cpf_cnpj;
+  std::cout<< "Insira o telefone do cliente\n"
+  std:cin >> fone;
 }
 void Interface::criarConta()
 {
