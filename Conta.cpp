@@ -1,12 +1,17 @@
 #include "pch.h"
 #include "Conta.h"
 #include "Cliente.h"
+#include <vector>
 #include "Movimentacao.h"
 
 
-Conta::Conta()
+Conta::Conta(Cliente _cliente)
 {
-	
+	numConta = proximoNumConta;
+	proximoNumConta++;
+	saldo = 0;
+	cliente = _cliente;
+	vector<Movimentacao> movimentacoes;
 }
 Conta::~Conta()
 {

@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Banco.h"
+#include "Cliente.h"
+#include "Conta.h"
 
 Banco::Banco(string _nomeBanco)
 {
@@ -12,6 +14,7 @@ Banco::~Banco()
 
 void Banco::inserirCliente(Cliente _cliente)
 {
+	
 }
 void Banco::criarConta(Conta _conta)
 {
@@ -49,7 +52,10 @@ void Banco::obterExtrato(int _numConta, time_t _dataInicial)
 void Banco::obterExtrato(int _numConta, time_t _dataInicial, time_t _dataFinal)
 {
 }
-void Banco::obterClientes()
+vector<Cliente> Banco::listarClientes()
+{
+}
+vector<Contas> Banco::listarContas()
 {
 }
 void Banco::gravarDados()

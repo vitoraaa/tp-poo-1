@@ -11,7 +11,7 @@ private:
 	string fone;
 public:
 
-	Cliente(string _nomeCliente,string _cpf_cnpj,string _endereço,string _fone);
+	Cliente(string _nomeCliente,string _cpf_cnpj,string _endereco,string _fone);
 	Cliente();
 	~Cliente();
 

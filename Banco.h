@@ -27,7 +27,8 @@ public:
 	void obterExtrato(int _numConta);
 	void obterExtrato(int _numConta, time_t _dataInicial);
 	void obterExtrato(int _numConta, time_t _dataInicial, time_t _dataFinal);
-	void obterClientes();
+	vector<Cliente> listarClientes();
+	vector<Conta> listarContas();
 	void gravarDados();
 	void lerDados();
 
