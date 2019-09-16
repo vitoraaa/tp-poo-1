@@ -5,7 +5,7 @@ class Interface
 public:
 	Interface();
 	~Interface();
-	int apresentarMenu();
+	void apresentarMenu();
 	void cadastrarCliente();
 	void criarConta();
 	void excluirCliente();
@@ -18,6 +18,6 @@ public:
 	void obterSaldo();
 	void obterExtrato();
 	void listarClientes(bool voltarAoMenu);
-	void listarContas();
-	Cliente buscaCliente(string _cpf_cnpj);
+	void listarContas(bool voltarAoMenu);
+	//Cliente buscaCliente(string _cpf_cnpj);
 };

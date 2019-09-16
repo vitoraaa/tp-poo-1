@@ -17,21 +17,24 @@ public:
 	void cadastrarCliente(Cliente _cliente);
 	void criarConta(Cliente _cliente);
 	int excluirCliente(string _cnp_cnpj);
-	void excluirConta(int _numConta);
+	int excluirConta(int _numConta);
 	void efetuarDeposito(int _numConta, int _valor);
 	void efetuarSaque(int _numConta, int valor);
 	void efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _valor);
 	void cobrarTarifa();
 	void cobrarCPMF();
 	double obterSaldo(int _numConta);
-	void obterExtrato(int _numConta);
-	void obterExtrato(int _numConta, time_t _dataInicial);
-	void obterExtrato(int _numConta, time_t _dataInicial, time_t _dataFinal);
+	vector<Movimentacao> obterExtrato(int _numConta);
+	vector<Movimentacao> obterExtrato(int _numConta, time_t _dataInicial);
+	vector<Movimentacao> obterExtrato(int _numConta, time_t _dataInicial, time_t _dataFinal);
 	vector<Cliente> listarClientes();
 	vector<Conta> listarContas();
 	void gravarDados();
 	void lerDados();
-	//Cliente buscaClienteCPF_CNPJ(string _cpf_cnpj);
+	Cliente buscaClienteCPF_CNPJ(string _cpf_cnpj);
+	int getIndexContaPorNumConta(int _numConta);
+	vector<Conta> buscarContaPorCliente(Cliente _cliente);
+	int calcularCPMF(int index);
 
 };
 

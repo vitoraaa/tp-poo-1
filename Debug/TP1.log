@@ -1,19 +1,18 @@
-﻿  pch.cpp
-  Banco.cpp
-  Cliente.cpp
+﻿  Banco.cpp
+C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(96,19): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(102,19): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(119,22): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(130,22): warning C4018:  '<': signed/unsigned mismatch
   Conta.cpp
+C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(167,20): warning C4018:  '<': signed/unsigned mismatch
   Interface.cpp
-C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C3646:  'buscaCliente': unknown override specifier
-C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C2059:  syntax error: '('
-C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,40): error C2238:  unexpected token(s) preceding ';'
-C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(142,47): error C2039:  'buscaClienteCPF_CNPJ': is not a member of 'Banco'
-C:\Users\andra\Desktop\tp-poo-1\Banco.h(8): message :  see declaration of 'Banco'
-C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(325,20): error C2039:  'buscaCliente': is not a member of 'Interface'
-  Movimentacao.cpp
+C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(188,23): warning C4804:  '>': unsafe use of type 'bool' in operation
+C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(212,23): warning C4804:  '>': unsafe use of type 'bool' in operation
   TP1.cpp
-C:\Users\andra\Desktop\tp-poo-1\Interface.h(3): message :  see declaration of 'Interface'
-C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C3646:  'buscaCliente': unknown override specifier
-C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C2059:  syntax error: '('
-  Compiling...
+C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(218,20): warning C4804:  '>': unsafe use of type 'bool' in operation
   Generating Code...
-C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,40): error C2238:  unexpected token(s) preceding ';'
+C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+  TP1.vcxproj -> C:\Users\andra\Desktop\tp-poo-1\Debug\TP1.exe

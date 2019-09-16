@@ -28,13 +28,10 @@ double Conta::getSaldo()
 }
 Cliente Conta::getCliente()
 {
-	Cliente cliente;
-
 	return cliente;
 }
 vector<Movimentacao> Conta::getMovimentacoes()
 {
-	vector<Movimentacao> movimentacoes;
 	return movimentacoes;
 }
 void Conta::debitarConta(int _valor, string _descricaoMovimentacao)

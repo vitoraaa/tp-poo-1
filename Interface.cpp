@@ -17,9 +17,9 @@ Interface::~Interface()
 {
 }
 
-int Interface::apresentarMenu()
+void Interface::apresentarMenu()
 {
-	system("cls");
+  system("cls");
   std::cout << "MENU\n\n";
   std::cout << "1 - Cadastrar um novo cliente\n";
   std::cout << "2 - Criar uma nova Conta\n";
@@ -77,23 +77,19 @@ int Interface::apresentarMenu()
     listarClientes(true);
     break;
   case 13:
-    listarContas();
+    listarContas(true);
     break;
 
   default:
     cout << "Opcao Invalida";
-	system("pause");
+    system("pause");
     apresentarMenu();
   }
-
-  apresentarMenu();
-  return opcaoMenu;
 }
 
 void Interface::cadastrarCliente()
 {
   string nome;
-  char _nome[256];
   string endereco;
   string cpf_cnpj;
   string fone;
@@ -116,15 +112,14 @@ void Interface::cadastrarCliente()
   std::cout << "\nInsira o telefone do cliente\n";
   cin >> fone;
   cin.clear();
-  
+
   Cliente cliente = Cliente(nome, cpf_cnpj, endereco, fone);
   banco.cadastrarCliente(cliente);
 
   std::cout << "\nCliente cadastrado com sucesso\n";
   std::cout << "Pressione Enter para voltar ao menu principal\n\n\n";
   system("pause");
-  
-
+  apresentarMenu();
 }
 void Interface::criarConta()
 {
@@ -140,53 +135,93 @@ void Interface::criarConta()
     cin.clear();
   }
   Cliente cliente = banco.buscaClienteCPF_CNPJ(cpf_cnpj);
-  if (cliente.getNome() == "CLIENTE_NAO_ENCONTRADO") {
-	  cout << "\n\nO cliente com CPF/CNPJ " << cpf_cnpj << " nao foi encontrado em nossa base de dados\n\n";
+  if (cliente.getNome() == "CLIENTE_NAO_ENCONTRADO")
+  {
+    cout << "\n\nO cliente com CPF/CNPJ " << cpf_cnpj << " nao foi encontrado em nossa base de dados\n\n";
   }
-  else {
-	  banco.criarConta(cliente);
-	  cout << "\n\nConta criada com sucesso\n\n";
+  else
+  {
+    banco.criarConta(cliente);
+    cout << "\n\nConta criada com sucesso\n\n";
   }
-  
+
   std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
   system("pause");
-
+  apresentarMenu();
 }
 
 void Interface::excluirCliente()
 {
   string cpf_cnpj;
-  std::cout << "Exclusao de cliente\n";
-  std::cout << "Insira o CPF ou CNPJ do cliente a ser excluido\n";
-  std::cin >> cpf_cnpj;
+  std::cout << "Exclusao de cliente\n\n";
+  listarClientes(false);
+
+  while (cpf_cnpj.length() == 0)
+  {
+    std::cout << "Insira o CPF ou CNPJ do cliente a ser excluido\n";
+    cin >> cpf_cnpj;
+    cin.clear();
+  }
   int status = banco.excluirCliente(cpf_cnpj);
   if (status == 1)
   {
-    std::cout << "Cliente de CPF/CNPJ " << cpf_cnpj << "excluido";
+    std::cout << "O cliente de CPF/CNPJ " << cpf_cnpj << " foi excluido";
+  }
+  else if (status == 2)
+  {
+    std::cout << "O cliente de CPF/CNPJ " << cpf_cnpj << " ainda possui contas(s) ativa(s) e nao pode ser excluido";
   }
   else
   {
     std::cout << "O cliente nao foi encontrado";
   }
+  std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+  system("pause");
+  apresentarMenu();
 }
 
 void Interface::excluirConta()
 {
-  int numConta;
-  std::cout << "Exclusao de conta\n";
-  std::cout << "Insira o numero da conta a ser excluida\n";
-  std::cin >> numConta;
-  banco.excluirConta(numConta);
+  int numConta = -1;
+  std::cout << "Exclusao de conta\n\n";
+
+  while (!numConta > 0)
+  {
+    std::cout << "Insira o numero da conta a ser excluida\n";
+    cin >> numConta;
+    cin.clear();
+  }
+  int status = banco.excluirConta(numConta);
+  if (status == 1)
+  {
+    std::cout << "A conta de numero " << numConta << " foi excluida";
+  }
+  else
+  {
+    std::cout << "A conta de numero " << numConta << " nao foi encontrada";
+  }
+  std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+  system("pause");
+  apresentarMenu();
 }
 void Interface::efetuarDeposito()
 {
-  int valor;
-  int numConta;
-  std::cout << "Deposito\n";
-  std::cout << "Insira o numero da conta a ser creditada\n";
-  std::cin >> numConta;
-  std::cout << "Insira o valor do deposito\n";
-  std::cin >> valor;
+  int valor=-1;
+  int numConta=-1;
+  std::cout << "Deposito\n\n";
+  while (!numConta > 0)
+  {
+    std::cout << "Insira o numero da conta a ser creditada\n";
+    cin >> numConta;
+    cin.clear();
+  }
+  while (!valor > 0)
+  {
+    std::cout << "Insira o numero da conta a ser creditada\n";
+    cin >> valor;
+    cin.clear();
+  }
+  
   banco.efetuarDeposito(numConta, valor);
 }
 void Interface::efetuarSaque()
@@ -288,7 +323,7 @@ void Interface::obterExtrato()
 }
 void Interface::listarClientes(bool voltarAoMenu)
 {
-	system("cls");
+  system("cls");
   vector<Cliente> clientes = banco.listarClientes();
   std::cout << "Clientes\n\n";
   std::cout << "#####################################################";
@@ -300,19 +335,20 @@ void Interface::listarClientes(bool voltarAoMenu)
     std::cout << "\nTelefone: " << clientes[i].getFone();
     std::cout << "\n#####################################################";
   }
-  if (voltarAoMenu) {
-	  std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
-	  system("pause");
+  if (voltarAoMenu)
+  {
+    std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+    system("pause");
+    apresentarMenu();
   }
-  
-  
 }
-void Interface::listarContas()
+void Interface::listarContas(bool voltarAoMenu)
 {
-	system("cls");
+  system("cls");
   vector<Conta> contas = banco.listarContas();
-  std::cout
-      << "Contas\n\n";
+  std::cout << "Contas\n\n";
+  std::cout << "#####################################################";
+
   for (unsigned int i = 0; i < contas.size(); i++)
   {
     std::cout << "\nConta: " << contas[i].getNumConta();
@@ -320,31 +356,25 @@ void Interface::listarContas()
     std::cout << "\nSaldo: " << contas[i].getSaldo();
     std::cout << "\n#####################################################\n";
   }
+  if (voltarAoMenu)
+  {
+    std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+    system("pause");
+    apresentarMenu();
+  }
 }
-
-Cliente Interface::buscaCliente(string _cpf_cnpj) {
-
-		for (auto i = banco.listarClientes().begin() ; i != banco.listarClientes().end(); i++)
-		{
-	
-			if ((*i).getCPF_CNPF() == _cpf_cnpj)
-			{
-				return (*i);
-			}
-		}
-
-		Cliente clienteNaoEncontrado = Cliente("CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO");
-		return clienteNaoEncontrado;
-}
-//Cliente Interface::buscaCliente(string _cpf_cnpj)
-//{
-//  
-//	for (auto i = banco.listarClientes().begin() ; i != banco.listarClientes().end(); i++)
-//	{
 //
-//		if ((*i).getCPF_CNPF() == _cpf_cnpj)
+//Cliente Interface::buscaCliente(string _cpf_cnpj) {
+//
+//		for (auto i = banco.listarClientes().begin() ; i != banco.listarClientes().end(); i++)
 //		{
-//			return (*i);
+//
+//			if ((*i).getCPF_CNPF() == _cpf_cnpj)
+//			{
+//				return (*i);
+//			}
 //		}
-//	}
+//
+//		Cliente clienteNaoEncontrado = Cliente("CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO");
+//		return clienteNaoEncontrado;
 //}

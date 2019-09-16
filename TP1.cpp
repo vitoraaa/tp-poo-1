@@ -14,13 +14,11 @@ int main()
 {
     Interface interface;
 
-    int opcaoEscolhida = 0;
+    
 
-    do
-    {
-        opcaoEscolhida = interface.apresentarMenu();
+    
+        interface.apresentarMenu();
         system("cls");
-    } while ((typeid(0).name() != typeid(opcaoEscolhida).name()) || opcaoEscolhida < 0 || opcaoEscolhida > 13);
 
 }
 

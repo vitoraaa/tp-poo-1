@@ -2,7 +2,8 @@
 #include <vector>
 #include <string>
 #include "Cliente.h"
-#include "Movimentacao.h"
+#include "Movimentacao.h"]
+
 using namespace std;
 
 class Conta
@@ -12,9 +13,10 @@ private:
 	double saldo;
 	Cliente cliente;
 	vector<Movimentacao> movimentacoes;
-	int proximoNumConta;
+	
 
 public:
+    int proximoNumConta;
 	Conta(Cliente _cliente);
 	~Conta();
 
