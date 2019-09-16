@@ -1,12 +1,13 @@
-using namespace std;
+
 #include "pch.h"
 #include "Interface.h"
 #include <iostream>
 #include "Cliente.h"
 #include "Banco.h"
 
+using namespace std;
 
-Banco banco;
+Banco banco = Banco("Banco Vitor");
 
 Interface::Interface()
 {
@@ -18,8 +19,8 @@ Interface::~Interface()
 
 int Interface::apresentarMenu()
 {
-
-  std::cout << "\n\nMENU\n\n";
+	system("cls");
+  std::cout << "MENU\n\n";
   std::cout << "1 - Cadastrar um novo cliente\n";
   std::cout << "2 - Criar uma nova Conta\n";
   std::cout << "3 - Excluir um cliente\n";
@@ -27,7 +28,7 @@ int Interface::apresentarMenu()
   std::cout << "5 - Efetuar um deposito\n";
   std::cout << "6 - Efetuar um saque\n";
   std::cout << "7 - Efetuar uma transferencia\n";
-  std::cout << "8 - Cobrar uma tarifa\n";
+  std::cout << "8 - Cobrar tarifa\n";
   std::cout << "9 - Cobrar CPMF\n";
   std::cout << "10 - Obter saldo\n";
   std::cout << "11 - Obter extrato\n";
@@ -37,178 +38,313 @@ int Interface::apresentarMenu()
   std::cout << "\n\nEntre o numero da opcao escolhida:\n\n";
   int opcaoMenu;
   cin >> opcaoMenu;
+  switch (opcaoMenu)
+  {
+  case 1:
+    cadastrarCliente();
+    break;
+  case 2:
+    criarConta();
+    break;
+  case 3:
+    excluirCliente();
+    break;
+  case 4:
+    excluirConta();
+    break;
+  case 5:
+    efetuarDeposito();
+    break;
+  case 6:
+    efetuarSaque();
+    break;
+  case 7:
+    efetuarTransferencia();
+    break;
+  case 8:
+    cobrarTarifa();
+    break;
+  case 9:
+    cobrarCPMF();
+    break;
+  case 10:
+    obterSaldo();
+    break;
+  case 11:
+    obterExtrato();
+    break;
+  case 12:
+    listarClientes(true);
+    break;
+  case 13:
+    listarContas();
+    break;
+
+  default:
+    cout << "Opcao Invalida";
+	system("pause");
+    apresentarMenu();
+  }
+
+  apresentarMenu();
   return opcaoMenu;
 }
+
 void Interface::cadastrarCliente()
 {
   string nome;
+  char _nome[256];
   string endereco;
   string cpf_cnpj;
   string fone;
-  std::cout<< "Cadastro de novo cliente\n"
-  std::cout<< "Insira o nome do cliente\n"
-  std:cin >> nome;
-  std::cout<< "Insira o endereco do cliente\n"
-  std:cin >> endereco;
-  std::cout<< "Insira o CPF ou CNPJ do cliente\n"
-  std:cin >> cpf_cnpj;
-  std::cout<< "Insira o telefone do cliente\n"
-  std:cin >> fone;
+  system("cls");
+  std::cout << "Cadastro de novo cliente\n";
+  cin.clear();
+
+  std::cout << "\nInsira o nome do cliente\n";
+  cin >> nome;
+  cin.clear();
+
+  std::cout << "\nInsira o endereco do cliente\n";
+  cin >> endereco;
+  cin.clear();
+
+  std::cout << "\nInsira o CPF ou CNPJ do cliente\n";
+  cin >> cpf_cnpj;
+  cin.clear();
+
+  std::cout << "\nInsira o telefone do cliente\n";
+  cin >> fone;
+  cin.clear();
+  
   Cliente cliente = Cliente(nome, cpf_cnpj, endereco, fone);
+  banco.cadastrarCliente(cliente);
+
+  std::cout << "\nCliente cadastrado com sucesso\n";
+  std::cout << "Pressione Enter para voltar ao menu principal\n\n\n";
+  system("pause");
+  
+
 }
 void Interface::criarConta()
 {
-string cpf_cnpj;
-std::cout<< "Abertura de nova conta\n"
-std::cout<< "Insira o CPF ou CNPJ do cliente da conta\n"
-std:cin >> cpf_cnpj;
-Cliente cliente;
-//banco.listarClientes(); buscar cliente pelo cpf inserido
-Conta conta = Conta(cliente);
-banco.criarConta(conta);  
+  string cpf_cnpj;
+  std::cout << "Abertura de nova conta\n\n";
+
+  listarClientes(false);
+
+  while (cpf_cnpj.length() == 0)
+  {
+    cout << "\n\nInsira o CPF ou CNPJ do cliente da conta\n";
+    cin >> cpf_cnpj;
+    cin.clear();
+  }
+  Cliente cliente = banco.buscaClienteCPF_CNPJ(cpf_cnpj);
+  if (cliente.getNome() == "CLIENTE_NAO_ENCONTRADO") {
+	  cout << "\n\nO cliente com CPF/CNPJ " << cpf_cnpj << " nao foi encontrado em nossa base de dados\n\n";
+  }
+  else {
+	  banco.criarConta(cliente);
+	  cout << "\n\nConta criada com sucesso\n\n";
+  }
+  
+  std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+  system("pause");
+
 }
 
 void Interface::excluirCliente()
 {
-  int cpf_cnpj
-  std::cout<< "Exclusao de cliente\n"
-  std::cout<< "Insira o CPF ou CNPJ do cliente a ser excluido\n"
-  std:cin >> cpf_cnpj;  
-banco.deletarCliente(cpf_cnpj);
+  string cpf_cnpj;
+  std::cout << "Exclusao de cliente\n";
+  std::cout << "Insira o CPF ou CNPJ do cliente a ser excluido\n";
+  std::cin >> cpf_cnpj;
+  int status = banco.excluirCliente(cpf_cnpj);
+  if (status == 1)
+  {
+    std::cout << "Cliente de CPF/CNPJ " << cpf_cnpj << "excluido";
+  }
+  else
+  {
+    std::cout << "O cliente nao foi encontrado";
+  }
 }
 
 void Interface::excluirConta()
 {
   int numConta;
-  std::cout<< "Exclusao de conta\n";
-  std::cout<< "Insira o numero da conta a ser excluida\n"
-  std:cin >> numConta;  
-  banco.deletarConta(numConta)
+  std::cout << "Exclusao de conta\n";
+  std::cout << "Insira o numero da conta a ser excluida\n";
+  std::cin >> numConta;
+  banco.excluirConta(numConta);
 }
 void Interface::efetuarDeposito()
 {
   int valor;
   int numConta;
-  std::cout<< "Deposito\n"
-  std::cout<< "Insira o numero da conta a ser creditada\n";
-  std::cin>>numConta;
-  std::cout<< "Insira o valor do deposito\n";
-  std::cin>>valor;
-  banco.efetuarDeposito(numConta,valor);
-
+  std::cout << "Deposito\n";
+  std::cout << "Insira o numero da conta a ser creditada\n";
+  std::cin >> numConta;
+  std::cout << "Insira o valor do deposito\n";
+  std::cin >> valor;
+  banco.efetuarDeposito(numConta, valor);
 }
 void Interface::efetuarSaque()
 {
   int valor;
   int numConta;
-  std::cout<< "Saque\n"
-  std::cout<< "Insira o numero da conta\n";
-  std::cin>>numConta;
-  std::cout<< "Insira o valor do saque\n";
-  std::cin>>valor;
-  banco.efetuarSaque(numConta,valor);
+  std::cout << "Saque\n";
+  std::cout << "Insira o numero da conta\n";
+  std::cin >> numConta;
+  std::cout << "Insira o valor do saque\n";
+  std::cin >> valor;
+  banco.efetuarSaque(numConta, valor);
 }
 void Interface::efetuarTransferencia()
 {
   int valor;
   int numContaOrigem;
   int numContaDestino;
-  std::cout<< "Transferencia\n"
-  std::cout<< "Insira o numero da conta de origem\n";
-  std::cin>>numContaOrigem;
-  std::cout<< "Insira o numero da conta de destino\n";
-  std::cin>>numContaDestino;
-  std::cout<< "Insira o valor da transferencia\n";
-  std::cin>>valor;
-  banco.efetuarTransferencia(numContaOrigem,numContaDestino,valor);
-
+  std::cout << "Transferencia\n";
+  std::cout << "Insira o numero da conta de origem\n";
+  std::cin >> numContaOrigem;
+  std::cout << "Insira o numero da conta de destino\n";
+  std::cin >> numContaDestino;
+  std::cout << "Insira o valor da transferencia\n";
+  std::cin >> valor;
+  banco.efetuarTransferencia(numContaOrigem, numContaDestino, valor);
 }
 void Interface::cobrarTarifa()
 {
   banco.cobrarTarifa();
-  std::cout<< "Tarifa cobrada\n"
-  
+  std::cout << "Tarifa cobrada\n";
 }
 void Interface::cobrarCPMF()
 {
   banco.cobrarCPMF();
-  std::cout<< "CPFM cobrada\n"
+  std::cout << "CPFM cobrada\n";
 }
 void Interface::obterSaldo()
 {
   int numConta;
- std::cout<< "Saldo\n"
-  std::cout<< "Insira o numero da conta a ser consultada\n";
-  std::cin>>numConta;
-  std::cout<< "Saldo" << banco.obterSaldo(numConta); 
+  double saldo;
+  std::cout << "Saldo\n";
+  std::cout << "Insira o numero da conta a ser consultada\n";
+  std::cin >> numConta;
+  saldo = banco.obterSaldo(numConta);
+  std::cout << "Saldo" << saldo;
 }
 void Interface::obterExtrato()
 {
   int opcao;
   bool opcaoValida = false;
-  std::cout << "Obter Extrato"
-  std::cout << "Qual tipo de extrato deseja obter?\n"
-  std::cout << "1 - Mes atual\n2 - A partir de uma data\n3 - Entre um periodo especifico"
+  std::cout << "Obter Extrato";
+  std::cout << "Qual tipo de extrato deseja obter?\n";
+  std::cout << "1 - Mes atual\n2 - A partir de uma data\n3 - Entre um periodo especifico";
   std::cin >> opcao;
-while(!opcaoValida) {
-  if(opcao ==1){
-    opcaoValida = true;
-    int numConta;
-    std::cout << "Digite o numero da conta a ser consultada"
-    std::cin >> numConta;
-    banco.obterExtrato(numConta);
-    //exibir extrato
-
-  }else if(opcao ==2){
-    opcaoValida = true;
-    int numConta;
-    time_t dataInicio
-    std::cout << "Digite o numero da conta a ser consultada"
-    std::cin >> numConta;
-    std::cout << "Digite a data do inicio da consulta"
-    std::cin >> dataInicio;
-    banco.obterExtrato(numConta, dataInicial);
-    //exibir extrato
-    
-  }else if(opcao == 3){
-    opcaoValida = true;
-    int numConta;
-    time_t dataInicio
-    time_t dataFim
-    std::cout << "Digite o numero da conta a ser consultada"
-    std::cin >> numConta;
-    std::cout << "Digite a data do inicio da consulta"
-    std::cin >> dataInicio;
-    std::cout << "Digite a data do fim da consulta"
-    std::cin >> dataFim;
-    banco.obterExtrato(numConta, dataInicial,dataFim);
-    //exibir extrato
-    
+  while (!opcaoValida)
+  {
+    if (opcao == 1)
+    {
+      opcaoValida = true;
+      int numConta;
+      std::cout << "Digite o numero da conta a ser consultada";
+      std::cin >> numConta;
+      banco.obterExtrato(numConta);
+      //exibir extrato
+    }
+    else if (opcao == 2)
+    {
+      opcaoValida = true;
+      int numConta;
+      time_t dataInicio;
+      std::cout
+          << "Digite o numero da conta a ser consultada";
+      std::cin >>
+          numConta;
+      std::cout << "Digite a data do inicio da consulta";
+      std::cin >> dataInicio;
+      banco.obterExtrato(numConta, dataInicio);
+      //exibir extrato
+    }
+    else if (opcao == 3)
+    {
+      opcaoValida = true;
+      int numConta;
+      time_t dataInicio;
+      time_t dataFim;
+      std::cout
+          << "Digite o numero da conta a ser consultada";
+      std::cin >>
+          numConta;
+      std::cout << "Digite a data do inicio da consulta";
+      std::cin >> dataInicio;
+      std::cout << "Digite a data do fim da consulta";
+      std::cin >> dataFim;
+      banco.obterExtrato(numConta, dataInicio, dataFim);
+      //exibir extrato
+    }
   }
 }
-
-
-}
-void Interface::listarClientes()
+void Interface::listarClientes(bool voltarAoMenu)
 {
-  vector<Cliente> clientes = banco.listarClientes()
-  std::cout << "Clientes";
-  for (int i; i < clientes.size; i++){
-    std::cout << "\nNome: "<< clientes[i].nome
-    std::cout << "\nCPF/CNPJ: "<< clientes[i].cpf_cnpj
-    std::cout << "\nEndereco: "<< clientes[i].endereco
-    std::cout << "\nTelefone: "<< clientes[i].fone
-    std::cout << "#####################################################"
+	system("cls");
+  vector<Cliente> clientes = banco.listarClientes();
+  std::cout << "Clientes\n\n";
+  std::cout << "#####################################################";
+  for (unsigned int i = 0; i < clientes.size(); i++)
+  {
+    std::cout << "\nNome: " << clientes[i].getNome();
+    std::cout << "\nCPF/CNPJ: " << clientes[i].getCPF_CNPF();
+    std::cout << "\nEndereco: " << clientes[i].getEndereco();
+    std::cout << "\nTelefone: " << clientes[i].getFone();
+    std::cout << "\n#####################################################";
   }
+  if (voltarAoMenu) {
+	  std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+	  system("pause");
+  }
+  
+  
 }
 void Interface::listarContas()
 {
- vector<Conta> contas = banco.listarContas()
-  std::cout << "Contas";
-  for (int i; i < contas.size; i++){
-    std::cout << "\nConta: "<< contas[i].numConta
-    std::cout << "\nCliente: "<< contas[i].cliente.nome
-    std::cout << "\nSaldo: "<< contas[i].saldo
-    std::cout << "#####################################################"
-  } 
+	system("cls");
+  vector<Conta> contas = banco.listarContas();
+  std::cout
+      << "Contas\n\n";
+  for (unsigned int i = 0; i < contas.size(); i++)
+  {
+    std::cout << "\nConta: " << contas[i].getNumConta();
+    std::cout << "\nCliente: " << contas[i].getCliente().getNome();
+    std::cout << "\nSaldo: " << contas[i].getSaldo();
+    std::cout << "\n#####################################################\n";
+  }
 }
+
+Cliente Interface::buscaCliente(string _cpf_cnpj) {
+
+		for (auto i = banco.listarClientes().begin() ; i != banco.listarClientes().end(); i++)
+		{
+	
+			if ((*i).getCPF_CNPF() == _cpf_cnpj)
+			{
+				return (*i);
+			}
+		}
+
+		Cliente clienteNaoEncontrado = Cliente("CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO");
+		return clienteNaoEncontrado;
+}
+//Cliente Interface::buscaCliente(string _cpf_cnpj)
+//{
+//  
+//	for (auto i = banco.listarClientes().begin() ; i != banco.listarClientes().end(); i++)
+//	{
+//
+//		if ((*i).getCPF_CNPF() == _cpf_cnpj)
+//		{
+//			return (*i);
+//		}
+//	}
+//}

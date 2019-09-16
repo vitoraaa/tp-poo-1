@@ -1,3 +1,19 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(452,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (TP1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿  pch.cpp
+  Banco.cpp
+  Cliente.cpp
+  Conta.cpp
+  Interface.cpp
+C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C3646:  'buscaCliente': unknown override specifier
+C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C2059:  syntax error: '('
+C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,40): error C2238:  unexpected token(s) preceding ';'
+C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(142,47): error C2039:  'buscaClienteCPF_CNPJ': is not a member of 'Banco'
+C:\Users\andra\Desktop\tp-poo-1\Banco.h(8): message :  see declaration of 'Banco'
+C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(325,20): error C2039:  'buscaCliente': is not a member of 'Interface'
+  Movimentacao.cpp
   TP1.cpp
-  TP1.vcxproj -> C:\Users\user\Desktop\POO\TP_1\TP1\Debug\TP1A.exe
+C:\Users\andra\Desktop\tp-poo-1\Interface.h(3): message :  see declaration of 'Interface'
+C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C3646:  'buscaCliente': unknown override specifier
+C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,22): error C2059:  syntax error: '('
+  Compiling...
+  Generating Code...
+C:\Users\andra\Desktop\tp-poo-1\Interface.h(22,40): error C2238:  unexpected token(s) preceding ';'

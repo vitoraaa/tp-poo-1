@@ -17,6 +17,7 @@ public:
 	void cobrarCPMF();
 	void obterSaldo();
 	void obterExtrato();
-	void listarClientes();
+	void listarClientes(bool voltarAoMenu);
 	void listarContas();
+	Cliente buscaCliente(string _cpf_cnpj);
 };

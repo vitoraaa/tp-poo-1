@@ -15,7 +15,7 @@ private:
 	int proximoNumConta;
 
 public:
-	Conta(Cliente _cliente;);
+	Conta(Cliente _cliente);
 	~Conta();
 
 	int getNumConta();

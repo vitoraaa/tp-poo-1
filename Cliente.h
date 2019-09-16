@@ -5,18 +5,18 @@ using namespace std;
 class Cliente
 {
 private:
-	string nomeCliente;
+	string nome;
 	string cpf_cnpj; 
 	string endereco;
 	string fone;
 public:
 
-	Cliente(string _nomeCliente,string _cpf_cnpj,string _endereco,string _fone);
+	Cliente(string _nome,string _cpf_cnpj,string _endereco,string _fone);
 	Cliente();
 	~Cliente();
 
-	string getNomeCliente();
-	void setNomeCliente(string NomeCliente);
+	string getNome();
+	void setnome(string nome);
 	string getCPF_CNPF();
 	void setCPF_CNPF(string CPF_CNPJ);
 	string getEndereco();

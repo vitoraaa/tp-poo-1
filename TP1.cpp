@@ -21,6 +21,7 @@ int main()
         opcaoEscolhida = interface.apresentarMenu();
         system("cls");
     } while ((typeid(0).name() != typeid(opcaoEscolhida).name()) || opcaoEscolhida < 0 || opcaoEscolhida > 13);
+
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
