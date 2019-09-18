@@ -14,9 +14,7 @@ Movimentacao::Movimentacao(string Descricao, char DebitoCredito, double Valor)
 Movimentacao::~Movimentacao()
 {
 }
-Movimentacao::Movimentacao()
-{
-}
+
 
 string Movimentacao::getDescricao()
 {

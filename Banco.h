@@ -18,9 +18,9 @@ public:
 	void criarConta(Cliente _cliente);
 	int excluirCliente(string _cnp_cnpj);
 	int excluirConta(int _numConta);
-	void efetuarDeposito(int _numConta, int _valor);
-	void efetuarSaque(int _numConta, int valor);
-	void efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _valor);
+	int efetuarDeposito(int _numConta, int _valor);
+	int efetuarSaque(int _numConta, int valor);
+	int efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _valor);
 	void cobrarTarifa();
 	void cobrarCPMF();
 	double obterSaldo(int _numConta);

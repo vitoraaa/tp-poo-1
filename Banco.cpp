@@ -27,17 +27,17 @@ Cliente Banco::buscaClienteCPF_CNPJ(string _cpf_cnpj)
 	Cliente clienteNaoEncontrado = Cliente("CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO");
 	return clienteNaoEncontrado;
 }
-void Banco::cadastrarCliente(Cliente _cliente)
+void Banco::cadastrarCliente(const Cliente _cliente)
 {
 	clientes.push_back(_cliente);
 }
-void Banco::criarConta(Cliente _cliente)
+void Banco::criarConta(const Cliente _cliente)
 {
 	Conta conta = Conta(_cliente);
 	contas.push_back(conta);
 }
 
-int Banco::excluirCliente(string _cpf_cnpj)
+int Banco::excluirCliente(const string _cpf_cnpj)
 {
 	auto i = clientes.begin();
 
@@ -75,21 +75,54 @@ int Banco::excluirConta(int _numConta)
 	}
 	return 0;
 }
-void Banco::efetuarDeposito(int _numConta, int _valor)
+int Banco::efetuarDeposito(int _numConta, int _valor)
 {
-	contas[getIndexContaPorNumConta(_numConta)].creditarConta(_valor, "Deposito");	
+	int index = getIndexContaPorNumConta(_numConta);
+	if (index != -1) {
+		contas[index].creditarConta(_valor, "Deposito");
+		return 1;
+	}
+	else {
+		return 0;
+	}
+		
 }
-void Banco::efetuarSaque(int _numConta, int _valor)
+int Banco::efetuarSaque(int _numConta, int _valor)
 {
-	contas[getIndexContaPorNumConta(_numConta)].debitarConta(_valor, "Saque");	
+	int status;
+	int index = getIndexContaPorNumConta(_numConta);
+	if (index != -1) {
+		status = contas[index].debitarConta(_valor, "Saque");
+		return status;
+	}
+	else {
+		return 0;
+	}
+	status = contas[getIndexContaPorNumConta(_numConta)].debitarConta(_valor, "Saque");	
+	return status;
 }
-void Banco::efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _valor)
+int Banco::efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _valor)
 {
 	string descricao; 
+	int status;
 	descricao = "Transferencia para a conta " + std::to_string(_numContaDestino);
-	contas[getIndexContaPorNumConta(_numContaOrigem)].debitarConta(_valor, descricao);
-	descricao = "Transferencia da conta " + std::to_string(_numContaOrigem);
-	contas[getIndexContaPorNumConta(_numContaDestino)].creditarConta(_valor, descricao);
+	int index = getIndexContaPorNumConta(_numContaOrigem);
+	if (index != -1) {
+		status = contas[index].debitarConta(_valor, descricao);
+	}
+	else {
+		return 0;
+	}
+	index = getIndexContaPorNumConta(_numContaDestino);
+	if (index != -1) {
+		descricao = "Transferencia da conta " + std::to_string(_numContaOrigem);
+		contas[index].creditarConta(_valor, descricao);
+	}
+	else {
+		return 0;
+	}
+	
+	return 1;
 }
 void Banco::cobrarTarifa()
 {
@@ -106,11 +139,19 @@ void Banco::cobrarCPMF()
 }
 double Banco::obterSaldo(int _numConta)
 {
-	return contas[getIndexContaPorNumConta(_numConta)].getSaldo();
+	int index = getIndexContaPorNumConta(_numConta);
+	if (index != -1) {
+		return contas[index].getSaldo();
+	}
+	else {
+		return -1;
+	}
+	
 }
 vector <Movimentacao> Banco::obterExtrato(int _numConta)
 {
-return contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
+	vector <Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
+	return movimentacoes ;
 }
 vector<Movimentacao> Banco::obterExtrato(int _numConta, time_t _dataInicial)
 {
@@ -127,7 +168,7 @@ vector<Movimentacao> Banco::obterExtrato(int _numConta, time_t _dataInicial, tim
 {
 	vector<Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
 	vector<Movimentacao> movimentacoesFiltradas;
-	for ( int i = 0 ; i < movimentacoes.size(); i++){
+	for ( unsigned int i = 0 ; i < movimentacoes.size(); i++){
 		if (difftime(time(0),movimentacoes[i].getDataMov()) <= (difftime(time(0),_dataInicial)) ){
 			movimentacoesFiltradas.push_back(movimentacoes[i]);
 		}
@@ -164,7 +205,7 @@ vector<Conta> Banco::buscarContaPorCliente(Cliente _cliente)
 }
 int Banco::getIndexContaPorNumConta(int _numConta)
 {
-	for (int i = 0; i < contas.size(); i++)
+	for (unsigned int i = 0; i < contas.size(); i++)
 	{
 
 		if (contas[i].getNumConta()==_numConta)

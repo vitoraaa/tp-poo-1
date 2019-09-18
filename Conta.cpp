@@ -34,11 +34,24 @@ vector<Movimentacao> Conta::getMovimentacoes()
 {
 	return movimentacoes;
 }
-void Conta::debitarConta(int _valor, string _descricaoMovimentacao)
+int Conta::debitarConta(int _valor, string _descricaoMovimentacao)
 {
+	if (saldo >= _valor) {
+		saldo -= _valor;
+		Movimentacao novaMovimentacao = Movimentacao(_descricaoMovimentacao, 'D', _valor);
+		movimentacoes.push_back(novaMovimentacao);
+		return 1;
+	}
+	else {
+		return 0;
+	}
+	
 }
 void Conta::creditarConta(int _valor, string _descricaoMovimentacao)
 {
+	saldo += _valor;
+	Movimentacao novaMovimentacao = Movimentacao(_descricaoMovimentacao, 'C', _valor);
+	movimentacoes.push_back(novaMovimentacao);
 }
 vector<Movimentacao> Conta::obterExtrato(time_t _dataInicial, time_t _dataFinal)
 {

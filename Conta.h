@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include "Cliente.h"
-#include "Movimentacao.h"]
+#include "Movimentacao.h"
 
 using namespace std;
 
@@ -24,7 +24,7 @@ public:
 	double getSaldo();
 	Cliente getCliente();
 	vector<Movimentacao> getMovimentacoes();
-	void debitarConta(int _valor, string _descricaoMovimentacao);
+	int debitarConta(int _valor, string _descricaoMovimentacao);
 	void creditarConta(int _valor, string _descricaoMovimentacao);
 	vector<Movimentacao> obterExtrato(time_t _dataInicial, time_t _dataFinal);
 	vector<Movimentacao> obterExtrato(time_t _dataInicial);

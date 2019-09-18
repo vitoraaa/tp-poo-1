@@ -1,18 +1,10 @@
 ﻿  Banco.cpp
-C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(96,19): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(102,19): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(119,22): warning C4018:  '<': signed/unsigned mismatch
-C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(130,22): warning C4018:  '<': signed/unsigned mismatch
-  Conta.cpp
-C:\Users\andra\Desktop\tp-poo-1\Banco.cpp(167,20): warning C4018:  '<': signed/unsigned mismatch
-  Interface.cpp
-C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(188,23): warning C4804:  '>': unsafe use of type 'bool' in operation
-C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(212,23): warning C4804:  '>': unsafe use of type 'bool' in operation
+C:\Users\user\Desktop\POO\TP_1\TP1\Banco.cpp(105,1): error C2556:  'void Banco::efetuarTransferencia(int,int,int)': overloaded function differs only by return type from 'int Banco::efetuarTransferencia(int,int,int)'
+C:\Users\user\Desktop\POO\TP_1\TP1\Banco.h(23): message :  see declaration of 'Banco::efetuarTransferencia'
+C:\Users\user\Desktop\POO\TP_1\TP1\Banco.cpp(104,13): error C2371:  'Banco::efetuarTransferencia': redefinition; different basic types
+C:\Users\user\Desktop\POO\TP_1\TP1\Banco.h(23): message :  see declaration of 'Banco::efetuarTransferencia'
+C:\Users\user\Desktop\POO\TP_1\TP1\Banco.cpp(114,19): warning C4018:  '<': signed/unsigned mismatch
+C:\Users\user\Desktop\POO\TP_1\TP1\Banco.cpp(120,19): warning C4018:  '<': signed/unsigned mismatch
   TP1.cpp
-C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(218,20): warning C4804:  '>': unsafe use of type 'bool' in operation
   Generating Code...
-C:\Users\andra\Desktop\tp-poo-1\Conta.h(5,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-  TP1.vcxproj -> C:\Users\andra\Desktop\tp-poo-1\Debug\TP1.exe
+C:\Users\user\Desktop\POO\TP_1\TP1\Banco.cpp(145,22): warning C4018:  '<': signed/unsigned mismatch

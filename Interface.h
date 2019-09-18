@@ -1,5 +1,6 @@
 #pragma once
-
+#include <vector>
+#include "Movimentacao.h"
 class Interface
 {
 public:
@@ -19,5 +20,6 @@ public:
 	void obterExtrato();
 	void listarClientes(bool voltarAoMenu);
 	void listarContas(bool voltarAoMenu);
+	void listarMovimentacoes(std::vector <Movimentacao> movimentacoes);
 	//Cliente buscaCliente(string _cpf_cnpj);
 };
