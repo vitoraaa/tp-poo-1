@@ -51,6 +51,7 @@ void Interface::lerDadosClientes() {
 	myfile.open("Clientes.txt");
 	string leitura;
 	getline(myfile, leitura);
+
 }
 void Interface::lerDadosContas() {
 	ifstream myfile;
