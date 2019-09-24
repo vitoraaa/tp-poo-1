@@ -7,18 +7,15 @@
 #include "Movimentacao.h"
 #include "Conta.h"
 #include "Banco.h"
-
+#include <fstream>
 #include <iostream>
 using namespace std;
 int main()
 {
-    Interface interface;
-
-    
-
-    
-        interface.apresentarMenu();
-        system("cls");
+	Interface interface;
+	interface.lerDados();
+	interface.apresentarMenu();
+	system("cls");
 
 }
 

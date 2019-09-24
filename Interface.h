@@ -6,6 +6,12 @@ class Interface
 public:
 	Interface();
 	~Interface();
+	void lerDados();
+	void escreverDados();
+	void escreverDadosContas();
+	void escreverDadosClientes();
+	void lerDadosContas();
+	void lerDadosClientes();
 	void apresentarMenu();
 	void cadastrarCliente();
 	void criarConta();
