@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include "Interface.h"
+#include <time.h>
 #include "Cliente.h"
 #include "Movimentacao.h"
 #include "Conta.h"
@@ -12,6 +13,9 @@
 using namespace std;
 int main()
 {
+	time_t rawtime = time(0);
+	struct tm timeinfo;
+	localtime_s(&timeinfo, &rawtime);
 	Interface interface;
 	interface.lerDados();
 	interface.apresentarMenu();

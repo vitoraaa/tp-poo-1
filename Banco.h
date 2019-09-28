@@ -25,8 +25,8 @@ public:
 	void cobrarCPMF();
 	double obterSaldo(int _numConta);
 	vector<Movimentacao> obterExtrato(int _numConta);
-	vector<Movimentacao> obterExtrato(int _numConta, time_t _dataInicial);
-	vector<Movimentacao> obterExtrato(int _numConta, time_t _dataInicial, time_t _dataFinal);
+	vector<Movimentacao> obterExtrato(int _numConta, struct tm _dataInicial);
+	vector<Movimentacao> obterExtrato(int _numConta, struct tm _dataInicial, struct tm _dataFinal);
 	vector<Cliente> listarClientes();
 	vector<Conta> listarContas();
 	void gravarDados();

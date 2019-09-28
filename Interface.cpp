@@ -419,11 +419,12 @@ void Interface::obterExtrato()
 			listarMovimentacoes(movimentacoes);
 
 
-
 		}
 		else if (opcao == 2)
 		{
 			opcaoValida = true;
+			struct tm dataInicial;
+
 			int numConta = -1;
 			listarContas(false);
 			while (!(numConta >= 0))
@@ -432,7 +433,25 @@ void Interface::obterExtrato()
 				std::cin >> numConta;
 				std::cin.clear();
 			}
-			vector <Movimentacao> movimentacoes = banco.obterExtrato(numConta);
+			dataInicial.tm_isdst = 0;
+			dataInicial.tm_min = 0;
+			dataInicial.tm_wday = 0;
+			dataInicial.tm_hour = 0;
+			dataInicial.tm_min = 0;
+			dataInicial.tm_sec = 0;
+			std::cout << "\nDigite o ano a partir do qual deseja consultar\n";
+			std::cin >> dataInicial.tm_year;
+			dataInicial.tm_year -= 1900;
+			std::cin.clear();
+			std::cout << "\nDigite o mes a partir do qual deseja consultar\n";
+			std::cin >> dataInicial.tm_mon;
+			dataInicial.tm_mon--;
+			std::cin.clear();
+			std::cout << "\nDigite o dia a partir do qual deseja consultar\n";
+			std::cin >> dataInicial.tm_mday;
+			std::cin.clear();
+
+			vector <Movimentacao> movimentacoes = banco.obterExtrato(numConta, dataInicial);
 			listarMovimentacoes(movimentacoes);
 		}
 		else if (opcao == 3)
@@ -504,10 +523,10 @@ void Interface::listarContas(bool voltarAoMenu)
 void Interface::listarMovimentacoes(vector <Movimentacao> movimentacoes) {
 	system("cls");
 	std::cout << "Movimentacoes\n\n";
-	std::cout << "#####################################################";
+		std::cout << "#####################################################";
 	for (unsigned int i = 0; i < movimentacoes.size(); i++)
 	{
-		std::cout << "\nData: " << movimentacoes[i].getDataMov();
+		std::cout << "\nData: " << movimentacoes[i].getDataMov().tm_mday << "/" << movimentacoes[i].getDataMov().tm_mon+1 << "/" << movimentacoes[i].getDataMov().tm_year+1900 ;
 		std::cout << "\nDescricao: " << movimentacoes[i].getDescricao() << " " << movimentacoes[i].getDebitoCredito();
 		std::cout << "\nValor: " << movimentacoes[i].getValor();
 		std::cout << "\n#####################################################";

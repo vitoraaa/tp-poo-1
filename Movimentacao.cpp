@@ -8,7 +8,9 @@ Movimentacao::Movimentacao(string Descricao, char DebitoCredito, double Valor)
 	descricao = Descricao;
 	debitoCredito = DebitoCredito;
 	valor = Valor;
-	dataMov = time(0);
+	time_t rawtime = time(0);
+	localtime_s(&dataMov, &rawtime);
+
 }
 
 Movimentacao::~Movimentacao()
@@ -20,7 +22,7 @@ string Movimentacao::getDescricao()
 {
 	return descricao;
 }
-time_t Movimentacao::getDataMov()
+struct tm Movimentacao::getDataMov()
 {
 	return dataMov;
 }

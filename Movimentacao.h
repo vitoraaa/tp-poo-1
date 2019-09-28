@@ -5,18 +5,17 @@ using namespace std;
 class Movimentacao
 {
 private:
-	time_t dataMov;
+	struct tm dataMov;
 	string descricao;
 	char debitoCredito;
 	double valor;
 
 public:
 	Movimentacao(string Descricao, char DebitoCredito, double Valor);
-	Movimentacao();
 	~Movimentacao();
 
 	string getDescricao();
-	time_t getDataMov();
+	struct tm getDataMov();
 	char getDebitoCredito();
 	double getValor();
 	
