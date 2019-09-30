@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <time.h>
 #include "Cliente.h"
 #include "Movimentacao.h"
 
