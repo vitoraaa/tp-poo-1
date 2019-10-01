@@ -6,6 +6,7 @@
 #include "Conta.h"
 #include "Banco.h"
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -26,8 +27,8 @@ void Interface::escreverDadosContas() {
 	vector <Conta> contas = banco.listarContas();
 	for (unsigned int i = 0; i < contas.size(); i++) {
 		string cpf_cnpj = contas[i].getCliente().getCPF_CNPF();
-		myfile << contas[i].getCliente().getCPF_CNPF() << "," << contas[i].getNumConta() << contas[i].getSaldo() << ";";
-		
+		myfile << contas[i].getNumConta() << "," << contas[i].getCliente().getCPF_CNPF() << "," << contas[i].getSaldo() << "," << ";";
+
 	}
 	myfile.close();
 }
@@ -39,49 +40,110 @@ void Interface::escreverDadosClientes() {
 	vector <Cliente> clientes = banco.listarClientes();
 	for (unsigned int i = 0; i < clientes.size(); i++) {
 
-		myfile << clientes[i].getNome() << "," << clientes[i].getCPF_CNPF()  << "," << clientes[i].getFone() << "," << clientes[i].getEndereco() << ";";
-		
+		myfile << clientes[i].getNome() << "," << clientes[i].getCPF_CNPF() << "," << clientes[i].getFone() << "," << clientes[i].getEndereco() << "," << ";";
+
 	}
-	
+
 	myfile.close();
 }
 
-void Interface::lerDadosClientes() {
-	ifstream myfile;
-	myfile.open("Clientes.txt");
-	string leitura;
-	getline(myfile, leitura);
+void Interface::lerClientesDB() {
+
+	ifstream file;
+	string stringArquivo;
+	vector<string> arrayStringClientes;
+	vector<string> arrayStringCamposCliente;
+	string stringCliente;
+	Cliente cliente = Cliente();
+
+	file.open("Clientes.txt");
+	getline(file, stringArquivo);
+
+	arrayStringClientes = splitString(stringArquivo, ";");
+
+	for (unsigned int i = 0; i < arrayStringClientes.size(); i++) {
+
+		stringCliente = arrayStringClientes[i];
+
+		arrayStringCamposCliente = splitString(stringCliente, ",");
+
+		cliente.setNome(arrayStringCamposCliente[0]);
+		cliente.setCPF_CNPF(arrayStringCamposCliente[1]);
+		cliente.setFone(arrayStringCamposCliente[2]);
+		cliente.setEndereco(arrayStringCamposCliente[3]);
+
+		banco.cadastrarCliente(cliente);
+
+
+	}
+
+
 
 }
-void Interface::lerDadosContas() {
-	ifstream myfile;
-	myfile.open("Contas.txt");
-	vector <string> stringContas;
-	string leitura;
-	while (myfile.peek() != 'n') {
-		myfile >> leitura;
-		stringContas.push_back(leitura);
+
+
+vector<string> Interface::splitString(string str, string delimitador) {
+
+	vector<string> arraySubStrings;
+	string subString;
+	size_t pos = 0;
+
+	while ((pos = str.find(delimitador)) != std::string::npos) {
+		subString = str.substr(0, pos);
+		arraySubStrings.push_back(subString);
+		str.erase(0, pos + delimitador.length());
 	}
-	
+
+	return arraySubStrings;
+
+}
+
+void Interface::lerContasDB() {
+	ifstream file;
+	string stringArquivo;
+	vector<string> arrayStringContas;
+	vector<string> arrayStringCamposConta;
+	string stringConta;
+	Cliente cliente = Cliente();
+
+	file.open("Contas.txt");
+	getline(file, stringArquivo);
+
+	arrayStringContas = splitString(stringArquivo, ";");
+
+	for (unsigned int i = 0; i < arrayStringContas.size(); i++) {
+
+		stringConta = arrayStringContas[i];
+
+		arrayStringCamposConta = splitString(stringConta, ",");
+
+		cliente = banco.buscaClienteCPF_CNPJ(arrayStringCamposConta[1]);
+		banco.criarConta(cliente);
+		banco.efetuarDeposito(stoi(arrayStringCamposConta[0]), stoi(arrayStringCamposConta[2]));
+
+	}
+
 }
 
 void Interface::lerDados() {
-	lerDadosClientes();
-	//lerDadosContas();
-	std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
-	system("pause");
-	apresentarMenu();
+	lerClientesDB();
+	lerContasDB();
+	/*std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+	system("pause");*/
+	//apresentarMenu();
 }
 
 void Interface::escreverDados() {
 
-	escreverDadosContas();
 	escreverDadosClientes();
-	
-	std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
-	system("pause");
+	escreverDadosContas();
+
+
+	/*std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+	system("pause");*/
+
 	apresentarMenu();
-	
+
 }
 
 
@@ -103,6 +165,8 @@ void Interface::apresentarMenu()
 	std::cout << "12 - Listar clientes\n";
 	std::cout << "13 - Listar contas\n";
 	std::cout << "14 - Salvar dados\n";
+
+
 
 
 	std::cout << "\n\nEntre o numero da opcao escolhida:\n\n";
@@ -152,6 +216,7 @@ void Interface::apresentarMenu()
 	case 14:
 		escreverDados();
 		break;
+
 
 	default:
 		cout << "Opcao Invalida";
@@ -330,7 +395,7 @@ void Interface::efetuarSaque()
 		std::cout << "\n\n Saque de " << valor << " reais efetuado com sucesso na conta " << numConta;
 	}
 	else if (status == 0) {
-		std::cout << "\n\nA conta " << numConta << " não possui saldo suficiente para este saque";
+		std::cout << "\n\nA conta " << numConta << " nï¿½o possui saldo suficiente para este saque";
 	}
 	std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
 	system("pause");
@@ -356,12 +421,19 @@ void Interface::cobrarTarifa()
 {
 	banco.cobrarTarifa();
 	std::cout << "Tarifa cobrada\n";
+	std::cout << "Pressione Enter para voltar ao menu principal\n\n\n";
+	system("pause");
+	apresentarMenu();
+
 }
 
 void Interface::cobrarCPMF()
 {
 	banco.cobrarCPMF();
 	std::cout << "CPFM cobrada\n";
+	std::cout << "Pressione Enter para voltar ao menu principal\n\n\n";
+	system("pause");
+	apresentarMenu();
 }
 
 void Interface::obterSaldo()
@@ -523,10 +595,10 @@ void Interface::listarContas(bool voltarAoMenu)
 void Interface::listarMovimentacoes(vector <Movimentacao> movimentacoes) {
 	system("cls");
 	std::cout << "Movimentacoes\n\n";
-		std::cout << "#####################################################";
+	std::cout << "#####################################################";
 	for (unsigned int i = 0; i < movimentacoes.size(); i++)
 	{
-		std::cout << "\nData: " << movimentacoes[i].getDataMov().tm_mday << "/" << movimentacoes[i].getDataMov().tm_mon+1 << "/" << movimentacoes[i].getDataMov().tm_year+1900 ;
+		std::cout << "\nData: " << movimentacoes[i].getDataMov().tm_mday << "/" << movimentacoes[i].getDataMov().tm_mon + 1 << "/" << movimentacoes[i].getDataMov().tm_year + 1900;
 		std::cout << "\nDescricao: " << movimentacoes[i].getDescricao() << " " << movimentacoes[i].getDebitoCredito();
 		std::cout << "\nValor: " << movimentacoes[i].getValor();
 		std::cout << "\n#####################################################";

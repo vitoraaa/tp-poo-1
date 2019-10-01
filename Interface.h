@@ -10,8 +10,8 @@ public:
 	void escreverDados();
 	void escreverDadosContas();
 	void escreverDadosClientes();
-	void lerDadosContas();
-	void lerDadosClientes();
+	void lerContasDB();
+	void lerClientesDB();
 	void apresentarMenu();
 	void cadastrarCliente();
 	void criarConta();
@@ -27,5 +27,6 @@ public:
 	void listarClientes(bool voltarAoMenu);
 	void listarContas(bool voltarAoMenu);
 	void listarMovimentacoes(std::vector <Movimentacao> movimentacoes);
+	vector<string> splitString(string str, string delimitador);
 	//Cliente buscaCliente(string _cpf_cnpj);
 };

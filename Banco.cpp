@@ -8,12 +8,13 @@
 Banco::Banco(string _nomeBanco)
 {
 	nomeBanco = _nomeBanco;
-	Cliente mockCliente = Cliente("vitor", "1", "rua", "32123");
+
+	/*Cliente mockCliente = Cliente("vitor", "1", "rua", "32123");
 	Conta mockConta = Conta(mockCliente);
 	mockConta.creditarConta(50, "Deposito");
 
 	clientes.push_back(mockCliente);
-	contas.push_back(mockConta);
+	contas.push_back(mockConta);*/
 	
 }
 

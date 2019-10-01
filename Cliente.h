@@ -16,7 +16,7 @@ public:
 	~Cliente();
 
 	string getNome();
-	void setnome(string nome);
+	void setNome(string nome);
 	string getCPF_CNPF();
 	void setCPF_CNPF(string CPF_CNPJ);
 	string getEndereco();

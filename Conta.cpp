@@ -7,6 +7,7 @@
 
 Conta::Conta(Cliente _cliente)
 {
+	static int proximoNumConta = 0;
 	numConta = proximoNumConta;
 	proximoNumConta++;
 	saldo = 0;

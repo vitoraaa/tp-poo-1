@@ -24,9 +24,9 @@ string Cliente::getNome()
 {
 	return nome;
 }
-void Cliente::setnome(string nome)
+void Cliente::setNome(string Nome)
 {
-	nome = nome;
+	nome = Nome;
 }
 string Cliente::getCPF_CNPF()
 {

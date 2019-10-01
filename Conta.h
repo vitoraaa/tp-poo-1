@@ -17,7 +17,6 @@ private:
 	
 
 public:
-    int proximoNumConta;
 	Conta(Cliente _cliente);
 	~Conta();
 

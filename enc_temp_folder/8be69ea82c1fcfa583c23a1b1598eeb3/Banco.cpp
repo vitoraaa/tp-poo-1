@@ -8,12 +8,13 @@
 Banco::Banco(string _nomeBanco)
 {
 	nomeBanco = _nomeBanco;
-	Cliente mockCliente = Cliente("vitor", "1", "rua", "32123");
+
+	/*Cliente mockCliente = Cliente("vitor", "1", "rua", "32123");
 	Conta mockConta = Conta(mockCliente);
 	mockConta.creditarConta(50, "Deposito");
 
 	clientes.push_back(mockCliente);
-	contas.push_back(mockConta);
+	contas.push_back(mockConta);*/
 	
 }
 
@@ -164,8 +165,7 @@ vector <Movimentacao> Banco::obterExtrato(int _numConta)
 	struct tm mesAtual;
 	struct tm dataMov;
 	localtime_s(&mesAtual, &rawNow);
-	mesAtual.tm_mon = 7;
-	mesAtual.tm_year = 119;
+	
 	for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 		dataMov = movimentacoes[i].getDataMov();
 		if (dataMov.tm_mon == mesAtual.tm_mon && dataMov.tm_year == mesAtual.tm_year ) {
@@ -185,22 +185,26 @@ vector<Movimentacao> Banco::obterExtrato(int _numConta, struct tm _dataInicial)
 
 		time_t rawDataMov = mktime(&movimentacoes[i].getDataMov());
 		time_t rawDataInicial = mktime(&_dataInicial);
-		time_t rawDiff = difftime(rawDataMov, rawDataInicial);
 
-		if (rawDiff >= 0 ) {
+		if (rawDataMov >= rawDataInicial ) {
 			movimentacoesFiltradas.push_back(movimentacoes[i]);
 		}		
 	}
 	return movimentacoesFiltradas;
 }
 vector<Movimentacao> Banco::obterExtrato(int _numConta, struct tm _dataInicial, struct tm _dataFinal)
-{
+{	
+	time_t rawDataInicial = mktime(&_dataInicial);
+	time_t rawDataFinal = mktime(&_dataFinal);
+	time_t rawDataMov;
 	vector<Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
 	vector<Movimentacao> movimentacoesFiltradas;
 	for ( unsigned int i = 0 ; i < movimentacoes.size(); i++){
-		/*if (difftime(time(0),movimentacoes[i].getDataMov()) <= (difftime(time(0),_dataInicial)) ){
+		rawDataMov = mktime(&movimentacoes[i].getDataMov());
+		if (rawDataMov >= rawDataInicial && rawDataMov <= rawDataFinal) {
 			movimentacoesFiltradas.push_back(movimentacoes[i]);
-		}*/
+		}
+		
 	}
 	return movimentacoesFiltradas;
 }
