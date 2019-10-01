@@ -15,7 +15,7 @@ int main()
 {
 	
 	Interface interface;
-	interface.lerDados();
+	interface.lerDB();
 	interface.apresentarMenu();
 	system("cls");
 

@@ -20,20 +20,20 @@ Interface::~Interface()
 {
 }
 
-void Interface::escreverDadosContas() {
+void Interface::escreverContasDB() {
 
 	ofstream myfile;
 	myfile.open("Contas.txt");
 	vector <Conta> contas = banco.listarContas();
 	for (unsigned int i = 0; i < contas.size(); i++) {
 		string cpf_cnpj = contas[i].getCliente().getCPF_CNPF();
-		myfile << contas[i].getNumConta() << "," << contas[i].getCliente().getCPF_CNPF() << "," << contas[i].getSaldo() << "," << ";";
+		myfile << contas[i].getNumConta() << "," << contas[i].getCliente().getCPF_CNPF() << "," << ";";
 
 	}
 	myfile.close();
 }
 
-void Interface::escreverDadosClientes() {
+void Interface::escreverClientesDB() {
 
 	ofstream myfile;
 	myfile.open("Clientes.txt");
@@ -41,6 +41,35 @@ void Interface::escreverDadosClientes() {
 	for (unsigned int i = 0; i < clientes.size(); i++) {
 
 		myfile << clientes[i].getNome() << "," << clientes[i].getCPF_CNPF() << "," << clientes[i].getFone() << "," << clientes[i].getEndereco() << "," << ";";
+
+	}
+
+	myfile.close();
+}
+
+void Interface::escreverMovimentacoesDB() {
+
+	ofstream myfile;
+	myfile.open("Movimentacoes.txt");
+	vector <Conta> contas = banco.listarContas();
+	vector <Movimentacao> movimentacoes;
+	unsigned int i = 0;
+	unsigned int j = 0;
+
+	for (i = 0; i < contas.size(); i++) {
+
+		movimentacoes = contas[i].getMovimentacoes();
+
+		for (j = 0; j < movimentacoes.size(); j++) {
+
+			int numConta = movimentacoes[j].getNumConta();
+			int rawDataMov = movimentacoes[j].getRawDataMov();
+			char debitoCredito = movimentacoes[j].getDebitoCredito();
+			string descricao = movimentacoes[j].getDescricao();
+			double valor = movimentacoes[j].getValor();
+
+			myfile << numConta << "," << rawDataMov << "," << debitoCredito << "," << descricao << "," << valor << "," << ";";
+		}
 
 	}
 
@@ -77,10 +106,8 @@ void Interface::lerClientesDB() {
 
 	}
 
-
-
+	file.close();
 }
-
 
 vector<string> Interface::splitString(string str, string delimitador) {
 
@@ -119,24 +146,60 @@ void Interface::lerContasDB() {
 
 		cliente = banco.buscaClienteCPF_CNPJ(arrayStringCamposConta[1]);
 		banco.criarConta(cliente);
-		banco.efetuarDeposito(stoi(arrayStringCamposConta[0]), stoi(arrayStringCamposConta[2]));
 
 	}
 
+	file.close();
+
 }
 
-void Interface::lerDados() {
+void Interface::lerMovimentacoesDB() {
+
+	ifstream file;
+	string stringArquivo;
+	vector<string> arrayStringMovimentacoes;
+	vector<string> arrayStringCamposMovimentacao;
+	string stringMovimentacao;
+	Movimentacao movimentacao = Movimentacao();
+
+	file.open("Movimentacoes.txt");
+	getline(file, stringArquivo);
+
+	arrayStringMovimentacoes = splitString(stringArquivo, ";");
+
+	for (unsigned int i = 0; i < arrayStringMovimentacoes.size(); i++) {
+
+		stringMovimentacao = arrayStringMovimentacoes[i];
+
+		arrayStringCamposMovimentacao = splitString(stringMovimentacao, ",");
+		Movimentacao movimentacao = Movimentacao(
+			arrayStringCamposMovimentacao[3],
+			arrayStringCamposMovimentacao[2][0],
+			stod(arrayStringCamposMovimentacao[4]),
+			stoi(arrayStringCamposMovimentacao[0]),
+			stoi(arrayStringCamposMovimentacao[1]));
+
+		banco.restaurarMovimentacao(stoi(arrayStringCamposMovimentacao[0]), movimentacao);
+
+
+
+	}
+
+	file.close();
+}
+
+void Interface::lerDB() {
 	lerClientesDB();
 	lerContasDB();
-	/*std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
-	system("pause");*/
-	//apresentarMenu();
+	lerMovimentacoesDB();
+
 }
 
-void Interface::escreverDados() {
+void Interface::escreverDB() {
 
-	escreverDadosClientes();
-	escreverDadosContas();
+	escreverClientesDB();
+	escreverContasDB();
+	escreverMovimentacoesDB();
 
 
 	/*std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
@@ -145,7 +208,6 @@ void Interface::escreverDados() {
 	apresentarMenu();
 
 }
-
 
 void Interface::apresentarMenu()
 {
@@ -214,7 +276,7 @@ void Interface::apresentarMenu()
 		listarContas(true);
 		break;
 	case 14:
-		escreverDados();
+		escreverDB();
 		break;
 
 
@@ -392,7 +454,7 @@ void Interface::efetuarSaque()
 	int status = banco.efetuarSaque(numConta, valor);
 
 	if (status == 1) {
-		std::cout << "\n\n Saque de " << valor << " reais efetuado com sucesso na conta " << numConta;
+		std::cout << "\n\n Saque de " << valor << " reais efetuado com sucesso da conta " << numConta;
 	}
 	else if (status == 0) {
 		std::cout << "\n\nA conta " << numConta << " n�o possui saldo suficiente para este saque";
@@ -590,7 +652,6 @@ void Interface::listarContas(bool voltarAoMenu)
 		apresentarMenu();
 	}
 }
-
 
 void Interface::listarMovimentacoes(vector <Movimentacao> movimentacoes) {
 	system("cls");

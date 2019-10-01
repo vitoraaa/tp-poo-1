@@ -6,12 +6,14 @@ class Interface
 public:
 	Interface();
 	~Interface();
-	void lerDados();
-	void escreverDados();
-	void escreverDadosContas();
-	void escreverDadosClientes();
+	void lerDB();
+	void escreverDB();
+	void escreverContasDB();
+	void escreverClientesDB();
+	void escreverMovimentacoesDB();
 	void lerContasDB();
 	void lerClientesDB();
+	void lerMovimentacoesDB();
 	void apresentarMenu();
 	void cadastrarCliente();
 	void criarConta();

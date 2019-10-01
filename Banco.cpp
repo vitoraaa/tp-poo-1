@@ -15,7 +15,7 @@ Banco::Banco(string _nomeBanco)
 
 	clientes.push_back(mockCliente);
 	contas.push_back(mockConta);*/
-	
+
 }
 
 Banco::~Banco()
@@ -36,10 +36,12 @@ Cliente Banco::buscaClienteCPF_CNPJ(string _cpf_cnpj)
 	Cliente clienteNaoEncontrado = Cliente("CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO", "CLIENTE_NAO_ENCONTRADO");
 	return clienteNaoEncontrado;
 }
+
 void Banco::cadastrarCliente(const Cliente _cliente)
 {
 	clientes.push_back(_cliente);
 }
+
 void Banco::criarConta(const Cliente _cliente)
 {
 	Conta conta = Conta(_cliente);
@@ -84,6 +86,7 @@ int Banco::excluirConta(int _numConta)
 	}
 	return 0;
 }
+
 int Banco::efetuarDeposito(int _numConta, int _valor)
 {
 	int index = getIndexContaPorNumConta(_numConta);
@@ -94,8 +97,9 @@ int Banco::efetuarDeposito(int _numConta, int _valor)
 	else {
 		return 0;
 	}
-		
+
 }
+
 int Banco::efetuarSaque(int _numConta, int _valor)
 {
 	int status;
@@ -107,12 +111,13 @@ int Banco::efetuarSaque(int _numConta, int _valor)
 	else {
 		return 0;
 	}
-	status = contas[getIndexContaPorNumConta(_numConta)].debitarConta(_valor, "Saque");	
+	status = contas[getIndexContaPorNumConta(_numConta)].debitarConta(_valor, "Saque");
 	return status;
 }
+
 int Banco::efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _valor)
 {
-	string descricao; 
+	string descricao;
 	int status;
 	descricao = "Transferencia para a conta " + std::to_string(_numContaDestino);
 	int index = getIndexContaPorNumConta(_numContaOrigem);
@@ -130,22 +135,25 @@ int Banco::efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _
 	else {
 		return 0;
 	}
-	
+
 	return 1;
 }
+
 void Banco::cobrarTarifa()
 {
-	for (unsigned int i = 0; i< contas.size(); i++){
+	for (unsigned int i = 0; i < contas.size(); i++) {
 		contas[i].debitarConta(15, "Cobranca de tarifa");
 	}
 }
+
 void Banco::cobrarCPMF()
 {
-	for (unsigned int i = 0; i< contas.size(); i++){
-		int valorCobrado = calcularCPMF(i);
+	for (unsigned int i = 0; i < contas.size(); i++) {
+		double valorCobrado = calcularCPMF(i);
 		contas[i].debitarConta(valorCobrado, "Cobranca de CPMF");
 	}
 }
+
 double Banco::obterSaldo(int _numConta)
 {
 	int index = getIndexContaPorNumConta(_numConta);
@@ -155,8 +163,9 @@ double Banco::obterSaldo(int _numConta)
 	else {
 		return -1;
 	}
-	
+
 }
+
 vector <Movimentacao> Banco::obterExtrato(int _numConta)
 {
 	vector <Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
@@ -165,63 +174,62 @@ vector <Movimentacao> Banco::obterExtrato(int _numConta)
 	struct tm mesAtual;
 	struct tm dataMov;
 	localtime_s(&mesAtual, &rawNow);
-	
+
 	for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 		dataMov = movimentacoes[i].getDataMov();
-		if (dataMov.tm_mon == mesAtual.tm_mon && dataMov.tm_year == mesAtual.tm_year ) {
+		if (dataMov.tm_mon == mesAtual.tm_mon && dataMov.tm_year == mesAtual.tm_year) {
 			movimentacoesFiltradas.push_back(movimentacoes[i]);
 		}
 	}
 
 	return movimentacoesFiltradas;
 }
+
 vector<Movimentacao> Banco::obterExtrato(int _numConta, struct tm _dataInicial)
 
 {
 	vector<Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
 	vector<Movimentacao> movimentacoesFiltradas;
 
-	for (unsigned int i = 0 ; i < movimentacoes.size(); i++){
+	for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 
 		time_t rawDataMov = mktime(&movimentacoes[i].getDataMov());
 		time_t rawDataInicial = mktime(&_dataInicial);
 
-		if (rawDataMov >= rawDataInicial ) {
+		if (rawDataMov >= rawDataInicial) {
 			movimentacoesFiltradas.push_back(movimentacoes[i]);
-		}		
+		}
 	}
 	return movimentacoesFiltradas;
 }
+
 vector<Movimentacao> Banco::obterExtrato(int _numConta, struct tm _dataInicial, struct tm _dataFinal)
-{	
+{
 	time_t rawDataInicial = mktime(&_dataInicial);
 	time_t rawDataFinal = mktime(&_dataFinal);
 	time_t rawDataMov;
 	vector<Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
 	vector<Movimentacao> movimentacoesFiltradas;
-	for ( unsigned int i = 0 ; i < movimentacoes.size(); i++){
+	for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 		rawDataMov = mktime(&movimentacoes[i].getDataMov());
 		if (rawDataMov >= rawDataInicial && rawDataMov <= rawDataFinal) {
 			movimentacoesFiltradas.push_back(movimentacoes[i]);
 		}
-		
+
 	}
 	return movimentacoesFiltradas;
 }
+
 vector<Cliente> Banco::listarClientes()
 {
 	return clientes;
 }
+
 vector<Conta> Banco::listarContas()
 {
 	return contas;
 }
-void Banco::gravarDados()
-{
-}
-void Banco::lerDados()
-{
-}
+
 vector<Conta> Banco::buscarContaPorCliente(Cliente _cliente)
 {
 
@@ -236,19 +244,52 @@ vector<Conta> Banco::buscarContaPorCliente(Cliente _cliente)
 	}
 	return contasCliente;
 }
+
 int Banco::getIndexContaPorNumConta(int _numConta)
 {
 	for (unsigned int i = 0; i < contas.size(); i++)
 	{
 
-		if (contas[i].getNumConta()==_numConta)
+		if (contas[i].getNumConta() == _numConta)
 		{
 			return i;
 		}
 	}
 	return -1;
 }
-int Banco::calcularCPMF(int i){
-	int valorCalculado = 0;
+
+double Banco::calcularCPMF(int indexConta) {
+
+	double valorCalculado = 0;
+
+	time_t rawNow = time(0);
+	time_t rawdataAtualMenosSeteDias = rawNow - (7 * 24 * 60 * 60);
+	struct tm dataAtualMenosSeteDias;
+	vector<Movimentacao> movimentacoesUltimosSeteDias;
+
+	localtime_s(&dataAtualMenosSeteDias, &rawdataAtualMenosSeteDias);
+
+	movimentacoesUltimosSeteDias = obterExtrato(contas[indexConta].getNumConta(), dataAtualMenosSeteDias);
+
+	for (unsigned int i = 0; i < movimentacoesUltimosSeteDias.size(); i++) {
+		if (movimentacoesUltimosSeteDias[i].getDebitoCredito() == 'D') {
+			valorCalculado += movimentacoesUltimosSeteDias[i].getValor() * 0.0038;
+		}
+
+	}
+
 	return valorCalculado;
 }
+
+void Banco::restaurarMovimentacao(int _numConta, Movimentacao _movimentacao) {
+	int index = getIndexContaPorNumConta(_numConta);
+	contas[index].restaurarMovimentacao(_movimentacao);
+	if (_movimentacao.getDebitoCredito() == 'C') {
+		contas[index].restaurarSaldo(_movimentacao.getValor());
+	}
+	else if (_movimentacao.getDebitoCredito() == 'D') {
+		contas[index].restaurarSaldo(-_movimentacao.getValor());
+	}
+	
+}
+
