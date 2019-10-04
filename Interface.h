@@ -7,7 +7,7 @@ public:
 	Interface();
 	~Interface();
 	void lerDB();
-	void escreverDB();
+	void escreverDB(bool voltarAoMenu);
 	void escreverContasDB();
 	void escreverClientesDB();
 	void escreverMovimentacoesDB();
@@ -25,10 +25,13 @@ public:
 	void cobrarTarifa();
 	void cobrarCPMF();
 	void obterSaldo();
+	void inicializarAplicacao();
 	void obterExtrato();
+	void fecharAplicacao();
+	string getOpcaoUsuario();
+	struct tm montaData(char c);
 	void listarClientes(bool voltarAoMenu);
 	void listarContas(bool voltarAoMenu);
 	void listarMovimentacoes(std::vector <Movimentacao> movimentacoes);
 	vector<string> splitString(string str, string delimitador);
-	//Cliente buscaCliente(string _cpf_cnpj);
 };

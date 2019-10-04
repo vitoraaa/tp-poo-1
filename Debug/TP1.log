@@ -1,7 +1,2 @@
-﻿  Banco.cpp
-  Conta.cpp
-  Interface.cpp
-  TP1.cpp
-  Generating Code...
-C:\Users\andra\Desktop\tp-poo-1\Interface.cpp(66,19): warning C4244:  'initializing': conversion from 'time_t' to 'int', possible loss of data
+﻿  Interface.cpp
   TP1.vcxproj -> C:\Users\andra\Desktop\tp-poo-1\Debug\TP1.exe

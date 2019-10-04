@@ -90,7 +90,7 @@ int Banco::excluirConta(int _numConta)
 int Banco::efetuarDeposito(int _numConta, int _valor)
 {
 	int index = getIndexContaPorNumConta(_numConta);
-	if (index != -1) {
+	if (index >= 0) {
 		contas[index].creditarConta(_valor, "Deposito");
 		return 1;
 	}
@@ -104,7 +104,7 @@ int Banco::efetuarSaque(int _numConta, int _valor)
 {
 	int status;
 	int index = getIndexContaPorNumConta(_numConta);
-	if (index != -1) {
+	if (index >= 0) {
 		status = contas[index].debitarConta(_valor, "Saque");
 		return status;
 	}
@@ -123,20 +123,20 @@ int Banco::efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _
 	int index = getIndexContaPorNumConta(_numContaOrigem);
 	if (index != -1) {
 		status = contas[index].debitarConta(_valor, descricao);
-	}
-	else {
-		return 0;
-	}
-	index = getIndexContaPorNumConta(_numContaDestino);
-	if (index != -1) {
-		descricao = "Transferencia da conta " + std::to_string(_numContaOrigem);
-		contas[index].creditarConta(_valor, descricao);
-	}
-	else {
-		return 0;
+		if (status == 1) {
+			index = getIndexContaPorNumConta(_numContaDestino);
+
+			if (index != -1) {
+				descricao = "Transferencia da conta " + std::to_string(_numContaOrigem);
+				contas[index].creditarConta(_valor, descricao);
+				return 1;
+			}
+			
+		}
+		
 	}
 
-	return 1;
+	return 0;
 }
 
 void Banco::cobrarTarifa()
@@ -283,13 +283,17 @@ double Banco::calcularCPMF(int indexConta) {
 
 void Banco::restaurarMovimentacao(int _numConta, Movimentacao _movimentacao) {
 	int index = getIndexContaPorNumConta(_numConta);
-	contas[index].restaurarMovimentacao(_movimentacao);
-	if (_movimentacao.getDebitoCredito() == 'C') {
-		contas[index].restaurarSaldo(_movimentacao.getValor());
+
+	if (index >= 0) {
+		contas[index].restaurarMovimentacao(_movimentacao);
+		if (_movimentacao.getDebitoCredito() == 'C') {
+			contas[index].restaurarSaldo(_movimentacao.getValor());
+		}
+		else if (_movimentacao.getDebitoCredito() == 'D') {
+			contas[index].restaurarSaldo(-_movimentacao.getValor());
+		}
 	}
-	else if (_movimentacao.getDebitoCredito() == 'D') {
-		contas[index].restaurarSaldo(-_movimentacao.getValor());
-	}
+	
 	
 }
 
