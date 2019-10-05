@@ -1,15 +1,32 @@
 #include "pch.h"
 #include "Conta.h"
 #include "Cliente.h"
+#include "Banco.h"
 #include <vector>
 #include "Movimentacao.h"
 
 
 Conta::Conta(Cliente _cliente)
+
 {
-	static int proximoNumConta = 0;
+	Banco banco = Banco();
+	int index = 0;
+	static int proximoNumConta = -1;
+	do {
+		proximoNumConta++;
+		index = banco.getIndexContaPorNumConta(proximoNumConta);
+	} while (index >= 0);
+
 	numConta = proximoNumConta;
-	proximoNumConta++;
+	//proximoNumConta++;
+	saldo = 0;
+	cliente = _cliente;
+	vector<Movimentacao> movimentacoes;
+}
+Conta::Conta(Cliente _cliente, int _numConta)
+{
+	static int proximoNumConta = _numConta + 1;
+	numConta = _numConta;
 	saldo = 0;
 	cliente = _cliente;
 	vector<Movimentacao> movimentacoes;

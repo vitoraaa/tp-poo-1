@@ -14,8 +14,10 @@ private:
 public:
 	Banco(string _nomeBanco);
 	~Banco();
+	Banco();
 	void cadastrarCliente(Cliente _cliente);
 	void criarConta(Cliente _cliente);
+	void criarConta(Cliente _cliente, int _numConta);
 	int excluirCliente(string _cnp_cnpj);
 	int excluirConta(int _numConta);
 	int efetuarDeposito(int _numConta, int _valor);

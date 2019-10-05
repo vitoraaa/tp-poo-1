@@ -33,6 +33,7 @@ string Interface::getOpcaoUsuario() {
 
 	return opcaoMenu;
 }
+
 void Interface::fecharAplicacao() {
 	escreverDB(false);
 }
@@ -44,7 +45,7 @@ void Interface::apresentarMenu()
 	system("cls");
 	std::cout << "MENU\n\n";
 	std::cout << "a - Cadastrar um novo cliente\n";
-	std::cout << "b - Criar uma nova Conta\n";
+	std::cout << "b - Criar uma nova conta\n";
 	std::cout << "c - Excluir um cliente\n";
 	std::cout << "d - Excluir uma conta\n";
 	std::cout << "e - Efetuar um deposito\n";
@@ -244,7 +245,10 @@ void Interface::lerContasDB() {
 		arrayStringCamposConta = splitString(stringConta, ",");
 
 		cliente = banco.buscaClienteCPF_CNPJ(arrayStringCamposConta[1]);
-		banco.criarConta(cliente);
+
+		int numeroConta = stoi(arrayStringCamposConta[0]);
+
+		banco.criarConta(cliente, numeroConta);
 
 	}
 
@@ -312,7 +316,7 @@ void Interface::cadastrarCliente()
 	string cpf_cnpj;
 	string fone;
 	system("cls");
-	std::cout << "Cadastro de novo cliente (sem espacos) \n";
+	std::cout << "Cadastro de novo cliente\n";
 	std::cin.clear();
 
 	std::cout << "\nInsira o nome do cliente (sem espacos)\n";
@@ -372,6 +376,7 @@ void Interface::criarConta()
 void Interface::excluirCliente()
 {
 	string cpf_cnpj;
+
 	std::cout << "Exclusao de cliente\n\n";
 	listarClientes(false);
 
@@ -469,13 +474,14 @@ void Interface::efetuarSaque()
 		std::cin >> valor;
 		std::cin.clear();
 	}
+
 	int status = banco.efetuarSaque(numConta, valor);
 
 	if (status == 1) {
-		std::cout << "\n\n Saque de " << valor << " reais efetuado com sucesso da conta " << numConta;
+		std::cout << "\n\nSaque de " << valor << " reais efetuado com sucesso da conta " << numConta;
 	}
 	else if (status == 0) {
-		std::cout << "\n\nA conta " << numConta << " n�o possui saldo suficiente para este saque";
+		std::cout << "\n\nA conta de numero " << numConta << " nao possui saldo suficiente ou nao existe";
 	}
 	std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
 	system("pause");
@@ -501,7 +507,7 @@ void Interface::efetuarTransferencia()
 		std::cout << "Transferencia efetuada\n";
 	}
 	else {
-		std::cout << "Transferencia nao efetuada, confira o saldo da conta debitada e a exitencia das contas informadas\n";
+		std::cout << "Transferencia nao efetuada, confira o saldo da conta debitada e a existencia das contas informadas\n";
 	}
 	
 	std::cout << "Pressione Enter para voltar ao menu principal\n\n\n";
@@ -663,7 +669,6 @@ void Interface::listarContas(bool voltarAoMenu)
 	{
 		std::cout << "Conta: " << contas[i].getNumConta();
 		std::cout << "\nCliente: " << contas[i].getCliente().getNome();
-		std::cout << "\nSaldo: " << contas[i].getSaldo();
 		std::cout << "\n#####################################################\n";
 	}
 	if (voltarAoMenu)

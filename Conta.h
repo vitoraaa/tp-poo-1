@@ -18,6 +18,7 @@ private:
 
 public:
 	Conta(Cliente _cliente);
+	Conta(Cliente _cliente, int _numConta);
 	~Conta();
 
 	int getNumConta();

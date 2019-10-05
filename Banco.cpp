@@ -9,16 +9,12 @@ Banco::Banco(string _nomeBanco)
 {
 	nomeBanco = _nomeBanco;
 
-	/*Cliente mockCliente = Cliente("vitor", "1", "rua", "32123");
-	Conta mockConta = Conta(mockCliente);
-	mockConta.creditarConta(50, "Deposito");
-
-	clientes.push_back(mockCliente);
-	contas.push_back(mockConta);*/
-
 }
 
 Banco::~Banco()
+{
+}
+Banco::Banco()
 {
 }
 
@@ -45,6 +41,11 @@ void Banco::cadastrarCliente(const Cliente _cliente)
 void Banco::criarConta(const Cliente _cliente)
 {
 	Conta conta = Conta(_cliente);
+	contas.push_back(conta);
+}
+void Banco::criarConta(const Cliente _cliente, int _numConta)
+{
+	Conta conta = Conta(_cliente, _numConta);
 	contas.push_back(conta);
 }
 
