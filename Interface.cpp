@@ -28,6 +28,7 @@ void Interface::inicializarAplicacao() {
 
 string Interface::getOpcaoUsuario() {
 	string opcaoMenu;
+	std::cout << "\nDigite a letra correspondente a opcao escolhida\n";
 	std::cin >> opcaoMenu;
 	std::cin.clear();
 
@@ -433,6 +434,7 @@ void Interface::efetuarDeposito()
 {
 	int valor = -1;
 	int numConta = -1;
+	int status = 0;
 	std::cout << "Deposito\n\n";
 	listarContas(false);
 	while (!(numConta >= 0))
@@ -441,15 +443,20 @@ void Interface::efetuarDeposito()
 		std::cin >> numConta;
 		std::cin.clear();
 	}
-	while (!(valor > 0))
+	while (!(valor >= 0))
 	{
 		std::cout << "Insira o valor do deposito\n";
 		std::cin >> valor;
 		std::cin.clear();
 	}
 
-	banco.efetuarDeposito(numConta, valor);
-	std::cout << "\n\nDeposito de " << valor << " reais efetuado com sucesso na conta " << numConta;
+	status = banco.efetuarDeposito(numConta, valor);
+	if (status == 1) {
+		std::cout << "\n\nDeposito de " << valor << " reais efetuado com sucesso na conta " << numConta;
+	}
+	else {
+		std::cout << "\n\nA conta de numero " << numConta<< " nao foi encontrada" ;
+	}
 	std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
 	system("pause");
 	apresentarMenu();

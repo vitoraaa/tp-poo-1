@@ -40,7 +40,12 @@ void Banco::cadastrarCliente(const Cliente _cliente)
 
 void Banco::criarConta(const Cliente _cliente)
 {
-	Conta conta = Conta(_cliente);
+	vector<int> numContasExistentes;
+	for (unsigned int i = 0; i < contas.size(); i++) {
+		numContasExistentes.push_back(contas[i].getNumConta());
+	}
+	Conta conta = Conta(_cliente, numContasExistentes);
+
 	contas.push_back(conta);
 }
 void Banco::criarConta(const Cliente _cliente, int _numConta)
@@ -132,9 +137,9 @@ int Banco::efetuarTransferencia(int _numContaOrigem, int _numContaDestino, int _
 				contas[index].creditarConta(_valor, descricao);
 				return 1;
 			}
-			
+
 		}
-		
+
 	}
 
 	return 0;
@@ -169,39 +174,53 @@ double Banco::obterSaldo(int _numConta)
 
 vector <Movimentacao> Banco::obterExtrato(int _numConta)
 {
-	vector <Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
+	int index = getIndexContaPorNumConta(_numConta);
 	vector<Movimentacao> movimentacoesFiltradas;
-	time_t rawNow = time(0);
-	struct tm mesAtual;
-	struct tm dataMov;
-	localtime_s(&mesAtual, &rawNow);
 
-	for (unsigned int i = 0; i < movimentacoes.size(); i++) {
-		dataMov = movimentacoes[i].getDataMov();
-		if (dataMov.tm_mon == mesAtual.tm_mon && dataMov.tm_year == mesAtual.tm_year) {
-			movimentacoesFiltradas.push_back(movimentacoes[i]);
+	if (index >= 0) {
+		vector <Movimentacao> movimentacoes = contas[index].getMovimentacoes();
+
+		time_t rawNow = time(0);
+		struct tm mesAtual;
+		struct tm dataMov;
+		localtime_s(&mesAtual, &rawNow);
+
+		for (unsigned int i = 0; i < movimentacoes.size(); i++) {
+			dataMov = movimentacoes[i].getDataMov();
+			if (dataMov.tm_mon == mesAtual.tm_mon && dataMov.tm_year == mesAtual.tm_year) {
+				movimentacoesFiltradas.push_back(movimentacoes[i]);
+			}
 		}
-	}
 
+
+	}
 	return movimentacoesFiltradas;
+
 }
 
 vector<Movimentacao> Banco::obterExtrato(int _numConta, struct tm _dataInicial)
 
 {
-	vector<Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
+	int index = getIndexContaPorNumConta(_numConta);
 	vector<Movimentacao> movimentacoesFiltradas;
 
-	for (unsigned int i = 0; i < movimentacoes.size(); i++) {
+	if (index >= 0) {
+		vector<Movimentacao> movimentacoes = contas[index].getMovimentacoes();
 
-		time_t rawDataMov = mktime(&movimentacoes[i].getDataMov());
-		time_t rawDataInicial = mktime(&_dataInicial);
 
-		if (rawDataMov >= rawDataInicial) {
-			movimentacoesFiltradas.push_back(movimentacoes[i]);
+		for (unsigned int i = 0; i < movimentacoes.size(); i++) {
+
+			time_t rawDataMov = mktime(&movimentacoes[i].getDataMov());
+			time_t rawDataInicial = mktime(&_dataInicial);
+
+			if (rawDataMov >= rawDataInicial) {
+				movimentacoesFiltradas.push_back(movimentacoes[i]);
+			}
 		}
+		
 	}
 	return movimentacoesFiltradas;
+
 }
 
 vector<Movimentacao> Banco::obterExtrato(int _numConta, struct tm _dataInicial, struct tm _dataFinal)
@@ -209,15 +228,20 @@ vector<Movimentacao> Banco::obterExtrato(int _numConta, struct tm _dataInicial, 
 	time_t rawDataInicial = mktime(&_dataInicial);
 	time_t rawDataFinal = mktime(&_dataFinal);
 	time_t rawDataMov;
-	vector<Movimentacao> movimentacoes = contas[getIndexContaPorNumConta(_numConta)].getMovimentacoes();
 	vector<Movimentacao> movimentacoesFiltradas;
-	for (unsigned int i = 0; i < movimentacoes.size(); i++) {
-		rawDataMov = mktime(&movimentacoes[i].getDataMov());
-		if (rawDataMov >= rawDataInicial && rawDataMov <= rawDataFinal) {
-			movimentacoesFiltradas.push_back(movimentacoes[i]);
-		}
+	int index = getIndexContaPorNumConta(_numConta);
+	if (index >= 0) {
+		vector<Movimentacao> movimentacoes = contas[index].getMovimentacoes();
 
+		for (unsigned int i = 0; i < movimentacoes.size(); i++) {
+			rawDataMov = mktime(&movimentacoes[i].getDataMov());
+			if (rawDataMov >= rawDataInicial && rawDataMov <= rawDataFinal) {
+				movimentacoesFiltradas.push_back(movimentacoes[i]);
+			}
+
+		}
 	}
+
 	return movimentacoesFiltradas;
 }
 
@@ -252,6 +276,18 @@ int Banco::getIndexContaPorNumConta(int _numConta)
 	{
 
 		if (contas[i].getNumConta() == _numConta)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+int Banco::getIndexContaPorNumConta(int _numConta, vector<int> numContasExistentes)
+{
+	for (unsigned int i = 0; i < numContasExistentes.size(); i++)
+	{
+
+		if (numContasExistentes[i] == _numConta)
 		{
 			return i;
 		}
@@ -294,7 +330,7 @@ void Banco::restaurarMovimentacao(int _numConta, Movimentacao _movimentacao) {
 			contas[index].restaurarSaldo(-_movimentacao.getValor());
 		}
 	}
-	
-	
+
+
 }
 

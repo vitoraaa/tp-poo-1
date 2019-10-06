@@ -35,6 +35,7 @@ public:
 	void restaurarSaldo(int _numConta, double _valor);
 	Cliente buscaClienteCPF_CNPJ(string _cpf_cnpj);
 	int getIndexContaPorNumConta(int _numConta);
+	int getIndexContaPorNumConta(int _numConta,vector<int> numContasExistentes);
 	vector<Conta> buscarContaPorCliente(Cliente _cliente);
 	double calcularCPMF(int index);
 

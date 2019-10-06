@@ -17,7 +17,8 @@ private:
 	
 
 public:
-	Conta(Cliente _cliente);
+	
+	Conta(Cliente _cliente, vector <int> numContasExistentes);
 	Conta(Cliente _cliente, int _numConta);
 	~Conta();
 
@@ -27,9 +28,7 @@ public:
 	vector<Movimentacao> getMovimentacoes();
 	int debitarConta(double _valor, string _descricaoMovimentacao);
 	void creditarConta(int _valor, string _descricaoMovimentacao);
-	vector<Movimentacao> obterExtrato(time_t _dataInicial, time_t _dataFinal);
-	vector<Movimentacao> obterExtrato(time_t _dataInicial);
-	vector<Movimentacao> obterExtrato();
+	
 	void restaurarMovimentacao(Movimentacao _movimentacao);
 	void restaurarSaldo(double _valor);
 };

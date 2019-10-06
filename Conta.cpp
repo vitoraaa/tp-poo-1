@@ -6,19 +6,26 @@
 #include "Movimentacao.h"
 
 
-Conta::Conta(Cliente _cliente)
+
+
+Conta::Conta(Cliente _cliente,  vector <int> numContasExistentes)
 
 {
-	Banco banco = Banco();
+	bool contaJaExiste = false;
 	int index = 0;
-	static int proximoNumConta = -1;
+	Banco banco = Banco();
+	static int proximoNumConta = 0;
 	do {
-		proximoNumConta++;
-		index = banco.getIndexContaPorNumConta(proximoNumConta);
-	} while (index >= 0);
+		contaJaExiste = false;
+		index = banco.getIndexContaPorNumConta(proximoNumConta,numContasExistentes);
+		if (index >= 0) {
+			contaJaExiste = true;
+			proximoNumConta++;
+		}
+	} while (contaJaExiste);
 
 	numConta = proximoNumConta;
-	//proximoNumConta++;
+	proximoNumConta++;
 	saldo = 0;
 	cliente = _cliente;
 	vector<Movimentacao> movimentacoes;
@@ -71,21 +78,7 @@ void Conta::creditarConta(int _valor, string _descricaoMovimentacao)
 	Movimentacao novaMovimentacao = Movimentacao(_descricaoMovimentacao, 'C', _valor, numConta);
 	movimentacoes.push_back(novaMovimentacao);
 }
-vector<Movimentacao> Conta::obterExtrato(time_t _dataInicial, time_t _dataFinal)
-{
-	vector<Movimentacao> extrato;
-	return extrato;
-}
-vector<Movimentacao> Conta::obterExtrato(time_t _dataInicial)
-{
-	vector<Movimentacao> extrato;
-	return extrato;
-}
-vector<Movimentacao> Conta::obterExtrato()
-{
-	vector<Movimentacao> extrato;
-	return extrato;
-}
+
 void Conta::restaurarMovimentacao(Movimentacao _movimentacao) {
 	movimentacoes.push_back(_movimentacao);
 }
