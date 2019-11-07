@@ -155,6 +155,9 @@
     <ClInclude Include="Banco.h" />
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="Conta.h" />
+    <ClInclude Include="ContaCorrente.h" />
+    <ClInclude Include="ContaPoupanca.h" />
+    <ClInclude Include="DiaBase.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="Movimentacao.h" />
     <ClInclude Include="pch.h" />
@@ -163,6 +166,9 @@
     <ClCompile Include="Banco.cpp" />
     <ClCompile Include="Cliente.cpp" />
     <ClCompile Include="Conta.cpp" />
+    <ClCompile Include="ContaCorrente.cpp" />
+    <ClCompile Include="ContaPoupanca.cpp" />
+    <ClCompile Include="DiaBase.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="Movimentacao.cpp" />
     <ClCompile Include="pch.cpp">

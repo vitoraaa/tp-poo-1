@@ -33,6 +33,15 @@
     <ClInclude Include="Movimentacao.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContaPoupanca.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContaCorrente.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DiaBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -54,6 +63,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Movimentacao.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContaPoupanca.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContaCorrente.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DiaBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

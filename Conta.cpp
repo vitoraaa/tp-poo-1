@@ -41,16 +41,18 @@ Conta::Conta(Cliente _cliente, int _numConta)
 Conta::~Conta()
 {
 }
-
+Conta::Conta()
+{
+}
 
 int Conta::getNumConta()
 {
 	return numConta;
 }
-double Conta::getSaldo()
-{
-	return saldo;
-}
+//double Conta::getSaldo()
+//{
+//	return saldo;
+//}
 Cliente Conta::getCliente()
 {
 	return cliente;
