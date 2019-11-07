@@ -7,19 +7,17 @@ Movimentacao::Movimentacao(string Descricao, char DebitoCredito, double Valor, i
 {
 	descricao = Descricao;
 	debitoCredito = DebitoCredito;
-	valor = Valor;	
+	valor = Valor;
 	rawDataMov = RawDataMov;
 	numConta = NumConta;
-
 }
-Movimentacao::Movimentacao(string Descricao, char DebitoCredito, double Valor, int NumConta )
+Movimentacao::Movimentacao(string Descricao, char DebitoCredito, double Valor, int NumConta)
 {
 	descricao = Descricao;
 	debitoCredito = DebitoCredito;
 	valor = Valor;
 	rawDataMov = time(0);
 	numConta = NumConta;
-
 }
 
 Movimentacao::~Movimentacao()
@@ -33,9 +31,7 @@ Movimentacao::Movimentacao()
 	valor = 0;
 	rawDataMov = 0;
 	numConta = -1;
-
 }
-
 
 string Movimentacao::getDescricao()
 {

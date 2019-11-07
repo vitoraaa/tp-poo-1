@@ -23,8 +23,4 @@ public:
 	char getDebitoCredito();
 	double getValor();
 	int getNumConta();
-
-	
-
 };
-

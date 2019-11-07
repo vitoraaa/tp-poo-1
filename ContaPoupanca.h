@@ -5,7 +5,6 @@
 class ContaPoupanca :
 	public Conta
 {
-
 private:
 	vector<DiaBase> diasBase;
 
@@ -25,7 +24,4 @@ public:
 	void creditarDiaBaseIndex(int index, double valor);
 	void criarDiaBase(int dia, double valor);
 	DiaBase getMaiorDiaBaseComSaldo();
-	
-	
 };
-

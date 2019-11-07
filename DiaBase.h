@@ -13,4 +13,3 @@ public:
 	DiaBase(int diaBase, double saldoDiaBase);
 	~DiaBase();
 };
-

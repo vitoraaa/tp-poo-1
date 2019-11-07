@@ -6,12 +6,12 @@ class Cliente
 {
 private:
 	string nome;
-	string cpf_cnpj; 
+	string cpf_cnpj;
 	string endereco;
 	string fone;
 public:
 
-	Cliente(string _nome,string _cpf_cnpj,string _endereco,string _fone);
+	Cliente(string _nome, string _cpf_cnpj, string _endereco, string _fone);
 	Cliente();
 	~Cliente();
 
@@ -23,7 +23,4 @@ public:
 	void setEndereco(string Endereco);
 	string getFone();
 	void setFone(string Fone);
-
-
 };
-

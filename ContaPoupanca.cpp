@@ -11,8 +11,7 @@
 
 using namespace std;
 
-ContaPoupanca::ContaPoupanca(Cliente _cliente, vector <int> numContasExistentes, vector<DiaBase> _diasBase) {
-
+ContaPoupanca::ContaPoupanca(Cliente& _cliente, const vector <int> numContasExistentes, const vector<DiaBase>& _diasBase = vector<DiaBase>()) {
 	bool contaJaExiste = false;
 	int index = 0;
 	Banco banco = Banco();
@@ -40,7 +39,6 @@ ContaPoupanca::ContaPoupanca(Cliente _cliente, int _numConta) {
 	vector<Movimentacao> movimentacoes;
 }
 ContaPoupanca::~ContaPoupanca() {
-
 }
 
 double ContaPoupanca::getSaldo() const {
@@ -52,7 +50,6 @@ double ContaPoupanca::getSaldo() const {
 }
 
 DiaBase ContaPoupanca::getMaiorDiaBaseComSaldo() {
-
 	DiaBase maiorDiaBase = diasBase.at(0);
 
 	for (unsigned int i = 1; i < diasBase.size(); i++) {
@@ -69,7 +66,6 @@ int ContaPoupanca::debitarConta(double valor, string descricaoMovimentacao)
 		DiaBase maiorDiaBase = getMaiorDiaBaseComSaldo();
 
 		if (maiorDiaBase.getSaldo() >= valor) {
-
 			maiorDiaBase.addToSaldo(-valor);
 
 			Movimentacao novaMovimentacao = Movimentacao(descricaoMovimentacao, 'D', valor, numConta);
@@ -86,7 +82,6 @@ int ContaPoupanca::debitarConta(double valor, string descricaoMovimentacao)
 			valor -= maiorDiaBase.getSaldo();
 			debitarConta(valor, descricaoMovimentacao);
 		}
-
 	}
 	else return 0;
 }
@@ -115,7 +110,6 @@ void  ContaPoupanca::creditarConta(int valor, string descricaoMovimentacao)
 	else {
 		criarDiaBase(hoje, valor);
 	}
-
 }
 
 void ContaPoupanca::criarDiaBase(int dia, double valor) {
@@ -129,7 +123,6 @@ void ContaPoupanca::criarDiaBase(int dia, double valor) {
 //void  ContaPoupanca::restaurarSaldo(double _valor) {
 //	saldo += _valor;
 //}
-
 
 int ContaPoupanca::getIndexDiaBase(int dia) {
 	int index = -1;

@@ -16,7 +16,7 @@ public:
 	{
 		return saldo;
 	}
-	
+
 	int debitarConta(double _valor, string _descricaoMovimentacao)
 	{
 		if (saldo >= _valor) {
@@ -28,7 +28,6 @@ public:
 		else {
 			return 0;
 		}
-
 	}
 	void creditarConta(int _valor, string _descricaoMovimentacao)
 	{
@@ -45,4 +44,3 @@ public:
 		saldo += _valor;
 	}
 };
-

@@ -1,4 +1,3 @@
-
 #include "pch.h"
 #include "Interface.h"
 #include <iostream>
@@ -19,7 +18,6 @@ Interface::Interface()
 Interface::~Interface()
 {
 }
-
 
 void Interface::inicializarAplicacao() {
 	lerDB();
@@ -68,7 +66,6 @@ void Interface::apresentarMenu()
 	std::cin >> opcaoMenu;
 	std::cin.clear();
 	std::cin.ignore(INT_MAX);*/
-
 
 	if (opcaoUsuario == "a") {
 		cadastrarCliente();
@@ -138,34 +135,28 @@ void Interface::apresentarMenu()
 }
 
 void Interface::escreverContasDB() {
-
 	ofstream myfile;
 	myfile.open("Contas.txt");
 	vector <Conta> contas = banco.listarContas();
 	for (unsigned int i = 0; i < contas.size(); i++) {
 		string cpf_cnpj = contas[i].getCliente().getCPF_CNPF();
 		myfile << contas[i].getNumConta() << "," << contas[i].getCliente().getCPF_CNPF() << "," << ";";
-
 	}
 	myfile.close();
 }
 
 void Interface::escreverClientesDB() {
-
 	ofstream myfile;
 	myfile.open("Clientes.txt");
 	vector <Cliente> clientes = banco.listarClientes();
 	for (unsigned int i = 0; i < clientes.size(); i++) {
-
 		myfile << clientes[i].getNome() << "," << clientes[i].getCPF_CNPF() << "," << clientes[i].getFone() << "," << clientes[i].getEndereco() << "," << ";";
-
 	}
 
 	myfile.close();
 }
 
 void Interface::escreverMovimentacoesDB() {
-
 	ofstream myfile;
 	myfile.open("Movimentacoes.txt");
 	vector <Conta> contas = banco.listarContas();
@@ -174,11 +165,9 @@ void Interface::escreverMovimentacoesDB() {
 	unsigned int j = 0;
 
 	for (i = 0; i < contas.size(); i++) {
-
 		movimentacoes = contas[i].getMovimentacoes();
 
 		for (j = 0; j < movimentacoes.size(); j++) {
-
 			int numConta = movimentacoes[j].getNumConta();
 			time_t rawDataMov = movimentacoes[j].getRawDataMov();
 			char debitoCredito = movimentacoes[j].getDebitoCredito();
@@ -187,14 +176,12 @@ void Interface::escreverMovimentacoesDB() {
 
 			myfile << numConta << "," << rawDataMov << "," << debitoCredito << "," << descricao << "," << valor << "," << ";";
 		}
-
 	}
 
 	myfile.close();
 }
 
 void Interface::lerClientesDB() {
-
 	ifstream file;
 	string stringArquivo;
 	vector<string> arrayStringClientes;
@@ -208,7 +195,6 @@ void Interface::lerClientesDB() {
 	arrayStringClientes = splitString(stringArquivo, ";");
 
 	for (unsigned int i = 0; i < arrayStringClientes.size(); i++) {
-
 		stringCliente = arrayStringClientes[i];
 
 		arrayStringCamposCliente = splitString(stringCliente, ",");
@@ -219,8 +205,6 @@ void Interface::lerClientesDB() {
 		cliente.setEndereco(arrayStringCamposCliente[3]);
 
 		banco.cadastrarCliente(cliente);
-
-
 	}
 
 	file.close();
@@ -240,7 +224,6 @@ void Interface::lerContasDB() {
 	arrayStringContas = splitString(stringArquivo, ";");
 
 	for (unsigned int i = 0; i < arrayStringContas.size(); i++) {
-
 		stringConta = arrayStringContas[i];
 
 		arrayStringCamposConta = splitString(stringConta, ",");
@@ -250,15 +233,12 @@ void Interface::lerContasDB() {
 		int numeroConta = stoi(arrayStringCamposConta[0]);
 
 		banco.criarConta(cliente, numeroConta);
-
 	}
 
 	file.close();
-
 }
 
 void Interface::lerMovimentacoesDB() {
-
 	ifstream file;
 	string stringArquivo;
 	vector<string> arrayStringMovimentacoes;
@@ -272,7 +252,6 @@ void Interface::lerMovimentacoesDB() {
 	arrayStringMovimentacoes = splitString(stringArquivo, ";");
 
 	for (unsigned int i = 0; i < arrayStringMovimentacoes.size(); i++) {
-
 		stringMovimentacao = arrayStringMovimentacoes[i];
 
 		arrayStringCamposMovimentacao = splitString(stringMovimentacao, ",");
@@ -284,9 +263,6 @@ void Interface::lerMovimentacoesDB() {
 			stoi(arrayStringCamposMovimentacao[1]));
 
 		banco.restaurarMovimentacao(stoi(arrayStringCamposMovimentacao[0]), movimentacao);
-
-
-
 	}
 
 	file.close();
@@ -296,18 +272,14 @@ void Interface::lerDB() {
 	lerClientesDB();
 	lerContasDB();
 	lerMovimentacoesDB();
-
 }
 
 void Interface::escreverDB(bool voltarAoMenu) {
-
 	escreverClientesDB();
 	escreverContasDB();
 	escreverMovimentacoesDB();
 
-
 	if (voltarAoMenu) apresentarMenu();
-
 }
 
 void Interface::cadastrarCliente()
@@ -316,6 +288,7 @@ void Interface::cadastrarCliente()
 	string endereco;
 	string cpf_cnpj;
 	string fone;
+
 	system("cls");
 	std::cout << "Cadastro de novo cliente\n";
 	std::cin.clear();
@@ -348,6 +321,7 @@ void Interface::cadastrarCliente()
 void Interface::criarConta()
 {
 	string cpf_cnpj;
+
 	std::cout << "Abertura de nova conta\n\n";
 
 	listarClientes(false);
@@ -365,7 +339,17 @@ void Interface::criarConta()
 	}
 	else
 	{
-		banco.criarConta(cliente);
+		string tipoConta = "";
+		while (tipoConta == "") {
+			std::cout << "\nDigite 'cc' para conta-corrente ou 'p' para poupanca  \n";
+			std::cin >> tipoConta;
+			std::cin.clear();
+			if (tipoConta == "cc" || tipoConta == "p")break;
+
+			tipoConta = "";
+		}
+
+		banco.criarConta(cliente, tipoConta);
 		cout << "\n\nConta criada com sucesso";
 	}
 
@@ -416,7 +400,17 @@ void Interface::excluirConta()
 		std::cin >> numConta;
 		std::cin.clear();
 	}
-	int status = banco.excluirConta(numConta);
+
+	string tipoConta = "";
+	while (tipoConta == "") {
+		std::cout << "\nDigite 'cc' para conta-corrente ou 'p' para poupanca  \n";
+		std::cin >> tipoConta;
+		std::cin.clear();
+		if (tipoConta == "cc" || tipoConta == "p")break;
+		tipoConta = "";
+	}
+
+	int status = banco.excluirConta(numConta, tipoConta);
 	if (status == 1)
 	{
 		std::cout << "A conta de numero " << numConta << " foi excluida";
@@ -450,17 +444,26 @@ void Interface::efetuarDeposito()
 		std::cin.clear();
 	}
 
-	status = banco.efetuarDeposito(numConta, valor);
+	string tipoConta = "";
+	while (tipoConta == "") {
+		std::cout << "\nDigite 'cc' para conta-corrente ou 'p' para poupanca  \n";
+		std::cin >> tipoConta;
+		std::cin.clear();
+		if (tipoConta == "cc" || tipoConta == "p")break;
+
+		tipoConta = "";
+	}
+
+	status = banco.efetuarDeposito(numConta, valor, tipoConta);
 	if (status == 1) {
 		std::cout << "\n\nDeposito de " << valor << " reais efetuado com sucesso na conta " << numConta;
 	}
 	else {
-		std::cout << "\n\nA conta de numero " << numConta<< " nao foi encontrada" ;
+		std::cout << "\n\nA conta de numero " << numConta << " nao foi encontrada";
 	}
 	std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
 	system("pause");
 	apresentarMenu();
-
 }
 
 void Interface::efetuarSaque()
@@ -481,8 +484,9 @@ void Interface::efetuarSaque()
 		std::cin >> valor;
 		std::cin.clear();
 	}
-
-	int status = banco.efetuarSaque(numConta, valor);
+	string tipoConta = consultarUsuarioTipoConta();
+	if (tipoConta == "e")apresentarMenu();
+	int status = banco.efetuarSaque(numConta, valor, tipoConta);
 
 	if (status == 1) {
 		std::cout << "\n\nSaque de " << valor << " reais efetuado com sucesso da conta " << numConta;
@@ -495,6 +499,18 @@ void Interface::efetuarSaque()
 	apresentarMenu();
 }
 
+string Interface::consultarUsuarioTipoConta() {
+	string tipoConta = "";
+	while (tipoConta == "") {
+		std::cout << "\nDigite 'cc' para conta-corrente ou 'p' para poupanca ou 'e' para sair \n";
+		std::cin >> tipoConta;
+		std::cin.clear();
+		if (tipoConta == "cc" || tipoConta == "p" || tipoConta == "e")break;
+
+		tipoConta = "";
+	}
+	return tipoConta;
+}
 void Interface::efetuarTransferencia()
 {
 	int valor;
@@ -516,7 +532,7 @@ void Interface::efetuarTransferencia()
 	else {
 		std::cout << "Transferencia nao efetuada, confira o saldo da conta debitada e a existencia das contas informadas\n";
 	}
-	
+
 	std::cout << "Pressione Enter para voltar ao menu principal\n\n\n";
 	system("pause");
 	apresentarMenu();
@@ -529,7 +545,6 @@ void Interface::cobrarTarifa()
 	std::cout << "Pressione Enter para voltar ao menu principal\n\n\n";
 	system("pause");
 	apresentarMenu();
-
 }
 
 void Interface::cobrarCPMF()
@@ -564,7 +579,6 @@ void Interface::obterSaldo()
 	std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
 	system("pause");
 	apresentarMenu();
-
 }
 
 void Interface::obterExtrato()
@@ -577,7 +591,6 @@ void Interface::obterExtrato()
 	std::cin.clear();
 	std::cin >> opcao;
 	std::cin.clear();
-
 
 	while (!opcaoValida)
 	{
@@ -594,8 +607,6 @@ void Interface::obterExtrato()
 			}
 			vector <Movimentacao> movimentacoes = banco.obterExtrato(numConta);
 			listarMovimentacoes(movimentacoes);
-
-
 		}
 		else if (opcao == 2)
 		{
@@ -629,11 +640,11 @@ void Interface::obterExtrato()
 				std::cin >> numConta;
 				std::cin.clear();
 			}
-			
+
 			dataInicial = montaData('i');
 			dataFinal = montaData('f');
 
-			vector <Movimentacao> movimentacoes = banco.obterExtrato(numConta,dataInicial,dataFinal);
+			vector <Movimentacao> movimentacoes = banco.obterExtrato(numConta, dataInicial, dataFinal);
 			listarMovimentacoes(movimentacoes);
 		}
 	}
@@ -700,7 +711,6 @@ void Interface::listarMovimentacoes(vector <Movimentacao> movimentacoes) {
 }
 
 vector<string> Interface::splitString(string str, string delimitador) {
-
 	vector<string> arraySubStrings;
 	string subString;
 	size_t pos = 0;
@@ -712,12 +722,11 @@ vector<string> Interface::splitString(string str, string delimitador) {
 	}
 
 	return arraySubStrings;
-
 }
 
 struct tm Interface::montaData(char c) {
 	struct tm data;
-	
+
 	if (c == 'i') {
 		data.tm_isdst = 0;
 		data.tm_min = 0;
@@ -731,7 +740,7 @@ struct tm Interface::montaData(char c) {
 		data.tm_min = 59;
 		data.tm_sec = 59;
 		std::cout << "\nDigite o ano ate o qual deseja consultar\n";
-	}	
+	}
 	std::cin >> data.tm_year;
 	data.tm_year -= 1900;
 	std::cin.clear();
@@ -751,7 +760,7 @@ struct tm Interface::montaData(char c) {
 	}
 	else {
 		std::cout << "\nDigite o dia ate o qual deseja consultar\n";
-	}	
+	}
 	std::cin >> data.tm_mday;
 	std::cin.clear();
 

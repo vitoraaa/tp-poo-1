@@ -5,10 +5,7 @@
 #include <vector>
 #include "Movimentacao.h"
 
-
-
-
-Conta::Conta(Cliente _cliente,  vector <int> numContasExistentes)
+Conta::Conta(Cliente _cliente, vector <int> numContasExistentes)
 
 {
 	bool contaJaExiste = false;
@@ -17,7 +14,7 @@ Conta::Conta(Cliente _cliente,  vector <int> numContasExistentes)
 	static int proximoNumConta = 0;
 	do {
 		contaJaExiste = false;
-		index = banco.getIndexContaPorNumConta(proximoNumConta,numContasExistentes);
+		index = banco.getIndexContaPorNumConta(proximoNumConta, numContasExistentes);
 		if (index >= 0) {
 			contaJaExiste = true;
 			proximoNumConta++;
@@ -72,7 +69,6 @@ int Conta::debitarConta(double _valor, string _descricaoMovimentacao)
 	else {
 		return 0;
 	}
-
 }
 void Conta::creditarConta(int _valor, string _descricaoMovimentacao)
 {

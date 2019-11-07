@@ -29,6 +29,7 @@ public:
 	void obterExtrato();
 	void fecharAplicacao();
 	string getOpcaoUsuario();
+	string consultarUsuarioTipoConta();
 	struct tm montaData(char c);
 	void listarClientes(bool voltarAoMenu);
 	void listarContas(bool voltarAoMenu);
