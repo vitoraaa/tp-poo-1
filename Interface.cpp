@@ -134,13 +134,35 @@ void Interface::apresentarMenu()
 	}
 }
 
-void Interface::escreverContasDB() {
+void Interface::escreverContasCorrentesDB() {
 	ofstream myfile;
-	myfile.open("Contas.txt");
-	vector <Conta> contas = banco.listarContas();
+	myfile.open("ContasCorrentes.txt");
+
+	vector <ContaCorrente> contas = banco.listarContasCorrentes();
+
 	for (unsigned int i = 0; i < contas.size(); i++) {
 		string cpf_cnpj = contas[i].getCliente().getCPF_CNPF();
-		myfile << contas[i].getNumConta() << "," << contas[i].getCliente().getCPF_CNPF() << "," << ";";
+
+		myfile << contas[i].getNumConta() << "," << contas[i].getCliente().getCPF_CNPF() << "," << contas[i].getLimiteCredito() << "," << ";";
+	}
+	myfile.close();
+}
+
+void Interface::escreverContasPoupancaDB() {
+	ofstream myfile;
+	myfile.open("ContasPoupanca.txt");
+	vector <ContaPoupanca> contas = banco.listarContasPoupanca();
+
+	for (unsigned int i = 0; i < contas.size(); i++) {
+		string cpf_cnpj = contas[i].getCliente().getCPF_CNPF();
+		vector<DiaBase> diasBase = contas[i].getDiasBase();
+		myfile << contas[i].getNumConta() << "," << contas[i].getCliente().getCPF_CNPF() << ",";
+
+		for (unsigned int j = 0; j < diasBase.size(); j++) {
+			myfile << diasBase[j].getDia() << "," << diasBase[j].getSaldo() << ",";
+		}
+
+		myfile << ";";
 	}
 	myfile.close();
 }
@@ -156,16 +178,40 @@ void Interface::escreverClientesDB() {
 	myfile.close();
 }
 
-void Interface::escreverMovimentacoesDB() {
+void Interface::escreverMovimentacoesContasPoupancaDB() {
 	ofstream myfile;
-	myfile.open("Movimentacoes.txt");
-	vector <Conta> contas = banco.listarContas();
+	myfile.open("MovimentacoesContasPoupanca.txt");
+	vector <ContaPoupanca> contasPoupanca = banco.listarContasPoupanca();
 	vector <Movimentacao> movimentacoes;
 	unsigned int i = 0;
 	unsigned int j = 0;
 
-	for (i = 0; i < contas.size(); i++) {
-		movimentacoes = contas[i].getMovimentacoes();
+	for (i = 0; i < contasPoupanca.size(); i++) {
+		movimentacoes = contasPoupanca[i].getMovimentacoes();
+
+		for (j = 0; j < movimentacoes.size(); j++) {
+			int numConta = movimentacoes[j].getNumConta();
+			time_t rawDataMov = movimentacoes[j].getRawDataMov();
+			char debitoCredito = movimentacoes[j].getDebitoCredito();
+			string descricao = movimentacoes[j].getDescricao();
+			double valor = movimentacoes[j].getValor();
+
+			myfile << numConta << "," << rawDataMov << "," << debitoCredito << "," << descricao << "," << valor << "," << ";";
+		}
+	}
+
+	myfile.close();
+}
+void Interface::escreverMovimentacoesContasCorrentesDB() {
+	ofstream myfile;
+	myfile.open("MovimentacoesContasCorrentes.txt");
+	vector <ContaCorrente> contasCorrentes = banco.listarContasCorrentes();
+	vector <Movimentacao> movimentacoes;
+	unsigned int i = 0;
+	unsigned int j = 0;
+
+	for (i = 0; i < contasCorrentes.size(); i++) {
+		movimentacoes = contasCorrentes[i].getMovimentacoes();
 
 		for (j = 0; j < movimentacoes.size(); j++) {
 			int numConta = movimentacoes[j].getNumConta();
@@ -210,7 +256,7 @@ void Interface::lerClientesDB() {
 	file.close();
 }
 
-void Interface::lerContasDB() {
+void Interface::lerContasCorrentesDB() {
 	ifstream file;
 	string stringArquivo;
 	vector<string> arrayStringContas;
@@ -218,7 +264,7 @@ void Interface::lerContasDB() {
 	string stringConta;
 	Cliente cliente = Cliente();
 
-	file.open("Contas.txt");
+	file.open("ContasCorrentes.txt");
 	getline(file, stringArquivo);
 
 	arrayStringContas = splitString(stringArquivo, ";");
@@ -232,7 +278,43 @@ void Interface::lerContasDB() {
 
 		int numeroConta = stoi(arrayStringCamposConta[0]);
 
-		banco.criarConta(cliente, numeroConta);
+		double limiteCredito = stod(arrayStringCamposConta[2]);
+
+		banco.criarContaCorrente(cliente, numeroConta, limiteCredito);
+	}
+
+	file.close();
+}
+
+void Interface::lerContasPoupancaDB() {
+	ifstream file;
+	string stringArquivo;
+	vector<string> arrayStringContas;
+	vector<string> arrayStringCamposConta;
+	string stringConta;
+	Cliente cliente = Cliente();
+
+	file.open("ContasPoupanca.txt");
+	getline(file, stringArquivo);
+
+	arrayStringContas = splitString(stringArquivo, ";");
+
+	for (unsigned int i = 0; i < arrayStringContas.size(); i++) {
+		stringConta = arrayStringContas[i];
+
+		arrayStringCamposConta = splitString(stringConta, ",");
+
+		cliente = banco.buscaClienteCPF_CNPJ(arrayStringCamposConta[1]);
+
+		int numeroConta = stoi(arrayStringCamposConta[0]);
+		vector<DiaBase> diasBase;
+
+		for (unsigned int i = 2; i < arrayStringCamposConta.size(); i += 2) {
+			DiaBase diaBase = DiaBase(stoi(arrayStringCamposConta[i]), stod(arrayStringCamposConta[i + 1]));
+			diasBase.push_back(diaBase);
+		}
+
+		banco.criarContaPoupanca(cliente, numeroConta, diasBase);
 	}
 
 	file.close();
@@ -270,14 +352,17 @@ void Interface::lerMovimentacoesDB() {
 
 void Interface::lerDB() {
 	lerClientesDB();
-	lerContasDB();
+	lerContasCorrentesDB();
+	lerContasPoupancaDB();
 	lerMovimentacoesDB();
 }
 
 void Interface::escreverDB(bool voltarAoMenu) {
 	escreverClientesDB();
-	escreverContasDB();
-	escreverMovimentacoesDB();
+	escreverContasCorrentesDB();
+	escreverContasPoupancaDB();
+	escreverMovimentacoesContasCorrentesDB();
+	escreverMovimentacoesContasPoupancaDB();
 
 	if (voltarAoMenu) apresentarMenu();
 }
@@ -349,7 +434,15 @@ void Interface::criarConta()
 			tipoConta = "";
 		}
 
-		banco.criarConta(cliente, tipoConta);
+		if (tipoConta == "cc") {
+			double limiteCredito = 0;
+			banco.criarContaCorrente(cliente, limiteCredito);
+		}
+		else if (tipoConta == "p") {
+			double limiteCredito = 0;
+
+			banco.criarContaPoupanca(cliente, limiteCredito);
+		}
 		cout << "\n\nConta criada com sucesso";
 	}
 
@@ -511,6 +604,7 @@ string Interface::consultarUsuarioTipoConta() {
 	}
 	return tipoConta;
 }
+
 void Interface::efetuarTransferencia()
 {
 	int valor;
@@ -676,10 +770,29 @@ void Interface::listarClientes(bool voltarAoMenu)
 	}
 }
 
-void Interface::listarContas(bool voltarAoMenu)
+void Interface::listarContasCorrentes(bool voltarAoMenu)
 {
 	system("cls");
-	vector<Conta> contas = banco.listarContas();
+	vector<Conta> contas = banco.listarContasCorrentes();
+	std::cout << "Contas\n";
+	std::cout << "#####################################################\n";
+
+	for (unsigned int i = 0; i < contas.size(); i++)
+	{
+		std::cout << "Conta: " << contas[i].getNumConta();
+		std::cout << "\nCliente: " << contas[i].getCliente().getNome();
+		std::cout << "\n#####################################################\n";
+	}
+	if (voltarAoMenu)
+	{
+		std::cout << "\n\nPressione Enter para voltar ao menu principal\n\n";
+		system("pause");
+		apresentarMenu();
+	}
+}void Interface::listarContasPoupanca(bool voltarAoMenu)
+{
+	system("cls");
+	vector<Conta> contas = banco.listarContasPoupanca();
 	std::cout << "Contas\n";
 	std::cout << "#####################################################\n";
 

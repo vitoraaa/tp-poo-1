@@ -5,36 +5,37 @@
 #include <vector>
 #include "Movimentacao.h"
 
-Conta::Conta(Cliente _cliente, vector <int> numContasExistentes)
+//Conta::Conta(Cliente _cliente, vector <int> numContasExistentes)
+//
+//{
+//	bool contaJaExiste = false;
+//	int index = 0;
+//	Banco banco = Banco();
+//	static int proximoNumConta = 0;
+//	do {
+//		contaJaExiste = false;
+//		index = banco.getIndexContaPorNumConta(proximoNumConta, numContasExistentes);
+//		if (index >= 0) {
+//			contaJaExiste = true;
+//			proximoNumConta++;
+//		}
+//	} while (contaJaExiste);
+//
+//	numConta = proximoNumConta;
+//	proximoNumConta++;
+//	saldo = 0;
+//	cliente = _cliente;
+//	vector<Movimentacao> movimentacoes;
+//}
 
-{
-	bool contaJaExiste = false;
-	int index = 0;
-	Banco banco = Banco();
-	static int proximoNumConta = 0;
-	do {
-		contaJaExiste = false;
-		index = banco.getIndexContaPorNumConta(proximoNumConta, numContasExistentes);
-		if (index >= 0) {
-			contaJaExiste = true;
-			proximoNumConta++;
-		}
-	} while (contaJaExiste);
-
-	numConta = proximoNumConta;
-	proximoNumConta++;
-	saldo = 0;
-	cliente = _cliente;
-	vector<Movimentacao> movimentacoes;
-}
-Conta::Conta(Cliente _cliente, int _numConta)
-{
-	static int proximoNumConta = _numConta + 1;
-	numConta = _numConta;
-	saldo = 0;
-	cliente = _cliente;
-	vector<Movimentacao> movimentacoes;
-}
+//Conta::Conta(Cliente _cliente, int _numConta)
+//{
+//	static int proximoNumConta = _numConta + 1;
+//	numConta = _numConta;
+//	saldo = 0;
+//	cliente = _cliente;
+//	vector<Movimentacao> movimentacoes;
+//}
 Conta::~Conta()
 {
 }

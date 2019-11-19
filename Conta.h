@@ -17,8 +17,8 @@ protected:
 
 public:
 	Conta();
-	Conta(Cliente _cliente, vector <int> numContasExistentes);
-	Conta(Cliente _cliente, int _numConta);
+	/*Conta(Cliente _cliente, vector <int> numContasExistentes);
+	Conta(Cliente _cliente, int _numConta);*/
 	~Conta();
 
 	int getNumConta();

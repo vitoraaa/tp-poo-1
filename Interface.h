@@ -8,10 +8,13 @@ public:
 	~Interface();
 	void lerDB();
 	void escreverDB(bool voltarAoMenu);
-	void escreverContasDB();
+	void escreverContasPoupancaDB();
+	void escreverContasCorrentesDB();
 	void escreverClientesDB();
-	void escreverMovimentacoesDB();
-	void lerContasDB();
+	void escreverMovimentacoesContasPoupancaDB();
+	void escreverMovimentacoesContasCorrentesDB();
+	void lerContasCorrentesDB();
+	void lerContasPoupancaDB();
 	void lerClientesDB();
 	void lerMovimentacoesDB();
 	void apresentarMenu();
@@ -32,7 +35,8 @@ public:
 	string consultarUsuarioTipoConta();
 	struct tm montaData(char c);
 	void listarClientes(bool voltarAoMenu);
-	void listarContas(bool voltarAoMenu);
+	void listarContasCorrentes(bool voltarAoMenu);
+	void listarContasPoupanca(bool voltarAoMenu);
 	void listarMovimentacoes(std::vector <Movimentacao> movimentacoes);
 	vector<string> splitString(string str, string delimitador);
 };

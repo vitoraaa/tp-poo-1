@@ -37,27 +37,39 @@ void Banco::cadastrarCliente(const Cliente _cliente)
 	clientes.push_back(_cliente);
 }
 
-void Banco::criarConta(const Cliente _cliente, string tipoConta, double limiteCredito = 0)
+void Banco::criarContaCorrente(const Cliente _cliente, string tipoConta, double limiteCredito = 0)
 {
 	vector<int> numContasExistentes;
-	for (unsigned int i = 0; i < contas.size(); i++) {
-		numContasExistentes.push_back(contas[i].getNumConta());
+	for (unsigned int i = 0; i < contasCorrentes.size(); i++) {
+		numContasExistentes.push_back(contasCorrentes[i].getNumConta());
 	}
 
-	if (tipoConta == "cc") {
-		ContaCorrente conta = ContaCorrente(_cliente, numContasExistentes, limiteCredito);
-		contasCorrentes.push_back(conta);
+	ContaCorrente conta = ContaCorrente(_cliente, numContasExistentes, limiteCredito);
+	contasCorrentes.push_back(conta);
+}
+//Conta conta = Conta(_cliente, numContasExistentes);
+}
+void Banco::criarContaCorrente(const Cliente _cliente, int _numConta, double limiteCredito = 0)
+{
+	ContaCorrente conta = ContaCorrente(_cliente, _numConta, limiteCredito);
+	contasCorrentes.push_back(conta);
+}
+
+void Banco::criarContaPoupanca(const Cliente _cliente, double limiteCredito = 0)
+{
+	vector<int> numContasExistentes;
+	for (unsigned int i = 0; i < contasPoupanca.size(); i++) {
+		numContasExistentes.push_back(contasPoupanca[i].getNumConta());
 	}
-	else if (tipoConta == "p") {
-		ContaPoupanca conta = ContaPoupanca(_cliente, numContasExistentes, vector<DiaBase>());
-		contasPoupanca.push_back(conta);
-	}
+	ContaPoupanca conta = ContaPoupanca(_cliente, numContasExistentes, vector<DiaBase>());
+	contasPoupanca.push_back(conta);
+
 	//Conta conta = Conta(_cliente, numContasExistentes);
 }
-void Banco::criarConta(const Cliente _cliente, int _numConta)
+void Banco::criarContaPoupanca(const Cliente _cliente, int _numConta, vector<DiaBase> diasBase)
 {
-	Conta conta = Conta(_cliente, _numConta);
-	contas.push_back(conta);
+	ContaPoupanca conta = ContaPoupanca(_cliente, _numConta, diasBase);
+	contasPoupanca.push_back(conta);
 }
 
 int Banco::excluirCliente(const string _cpf_cnpj)
@@ -268,9 +280,26 @@ vector<Cliente> Banco::listarClientes()
 	return clientes;
 }
 
-vector<Conta> Banco::listarContas()
+vector<ContaCorrente> Banco::listarContasCorrentes()
 {
-	return contas;
+	return contasCorrentes;
+}
+vector<ContaPoupanca> Banco::listarContasPoupanca()
+{
+	return contasPoupanca;
+}
+
+vector<Conta> Banco::buscarContaPorCliente(Cliente _cliente)
+{
+	vector<Conta> contasCliente;
+	for (auto i = contas.begin(); i != contas.end(); i++)
+	{
+		if ((*i).getCliente().getCPF_CNPF() == _cliente.getCPF_CNPF())
+		{
+			contasCliente.push_back(*i);
+		}
+	}
+	return contasCliente;
 }
 
 vector<Conta> Banco::buscarContaPorCliente(Cliente _cliente)

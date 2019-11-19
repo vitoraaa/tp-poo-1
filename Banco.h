@@ -19,8 +19,10 @@ public:
 	~Banco();
 	Banco();
 	void cadastrarCliente(Cliente _cliente);
-	void criarConta(Cliente _cliente, string tipoConta);
-	void criarConta(Cliente _cliente, int _numConta);
+	void criarContaCorrente(const Cliente _cliente, double limiteCredito = 0);
+	void criarContaCorrente(Cliente _cliente, int _numConta, double limiteCredito);
+	void criarContaPoupanca(Cliente _cliente, int _numConta, vector<DiaBase> diasBase);
+	void criarContaPoupanca(const Cliente _cliente, double limiteCredito = 0);
 	int excluirCliente(string _cnp_cnpj);
 	int excluirConta(int _numConta, string tipoConta);
 	int efetuarDeposito(int _numConta, int _valor, string tipoConta);
@@ -33,7 +35,8 @@ public:
 	vector<Movimentacao> obterExtrato(int _numConta, struct tm _dataInicial);
 	vector<Movimentacao> obterExtrato(int _numConta, struct tm _dataInicial, struct tm _dataFinal);
 	vector<Cliente> listarClientes();
-	vector<Conta> listarContas();
+	vector<ContaCorrente> listarContasCorrentes();
+	vector<ContaPoupanca> listarContasPoupanca();
 	void restaurarMovimentacao(int _numConta, Movimentacao _movimentacao);
 	void restaurarSaldo(int _numConta, double _valor);
 	Cliente buscaClienteCPF_CNPJ(string _cpf_cnpj);
