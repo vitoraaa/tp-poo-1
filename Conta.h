@@ -25,9 +25,9 @@ public:
 	Cliente getCliente();
 	vector<Movimentacao> getMovimentacoes();
 
-	virtual double getSaldo() const;
 	virtual int debitarConta(double _valor, string _descricaoMovimentacao) = 0;
 	virtual void creditarConta(int _valor, string _descricaoMovimentacao) = 0;
 	virtual void restaurarMovimentacao(Movimentacao _movimentacao) = 0;
 	virtual void restaurarSaldo(double _valor) = 0;
+	//virtual double getSaldo();
 };

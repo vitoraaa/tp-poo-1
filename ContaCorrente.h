@@ -8,19 +8,19 @@ private:
 
 public:
 
-	ContaCorrente(Cliente _cliente, vector <int> numContasExistentes, double _limiteCredito);
+	ContaCorrente(Cliente _cliente, const vector <int> numContasExistentes, double _limiteCredito);
 	ContaCorrente(Cliente _cliente, int _numConta, double _limiteCredito);
 	~ContaCorrente();
 
-	double getSaldo() { return saldo; };
+	virtual double getSaldo();
 
-	int debitarConta(double _valor, string _descricaoMovimentacao);
+	virtual int debitarConta(double _valor, string _descricaoMovimentacao);
 
-	void creditarConta(int _valor, string _descricaoMovimentacao);
+	virtual void creditarConta(int _valor, string _descricaoMovimentacao);
 
-	void restaurarMovimentacao(Movimentacao _movimentacao);
+	virtual void restaurarMovimentacao(Movimentacao _movimentacao);
 
-	void restaurarSaldo(double _valor);
+	virtual void restaurarSaldo(double _valor);
 
 	double getLimiteCredito() { return limiteCredito; };
 };

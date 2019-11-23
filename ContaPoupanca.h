@@ -10,11 +10,11 @@ private:
 
 public:
 
-	ContaPoupanca(Cliente _cliente, vector <int> numContasExistentes, vector<DiaBase> _diasBase);
-	ContaPoupanca(Cliente _cliente, int _numConta, vector<DiaBase> _diasBase);
+	ContaPoupanca(const Cliente& _cliente, const vector <int>& numContasExistentes, const vector<DiaBase>& _diasBase);
+	ContaPoupanca(const Cliente& _cliente, const int& _numConta, const vector<DiaBase>& _diasBase);
 	~ContaPoupanca();
 	ContaPoupanca();
-	virtual double getSaldo() const;
+	virtual double getSaldo();
 	virtual int debitarConta(double _valor, string _descricaoMovimentacao);
 	virtual void creditarConta(int _valor, string _descricaoMovimentacao);
 	virtual void restaurarMovimentacao(Movimentacao _movimentacao);
@@ -23,5 +23,5 @@ public:
 	int getIndexDiaBase(int _diaBase);
 	void creditarDiaBaseIndex(int index, double valor);
 	void criarDiaBase(int dia, double valor);
-	DiaBase getMaiorDiaBaseComSaldo();
+	int getIndexMaiorDiaBaseComSaldo();
 };

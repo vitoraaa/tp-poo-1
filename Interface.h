@@ -16,7 +16,8 @@ public:
 	void lerContasCorrentesDB();
 	void lerContasPoupancaDB();
 	void lerClientesDB();
-	void lerMovimentacoesDB();
+	void lerMovimentacoesContasCorrentesDB();
+	void lerMovimentacoesContasPoupancaDB();
 	void apresentarMenu();
 	void cadastrarCliente();
 	void criarConta();

@@ -11,14 +11,14 @@
 
 using namespace std;
 
-ContaPoupanca::ContaPoupanca(Cliente& _cliente, const vector <int> numContasExistentes, const vector<DiaBase>& _diasBase = vector<DiaBase>()) {
+ContaPoupanca::ContaPoupanca(const Cliente& _cliente, const vector <int>& numContasExistentes, const vector<DiaBase>& _diasBase = vector<DiaBase>()) {
 	bool contaJaExiste = false;
 	int index = 0;
 	Banco banco = Banco();
 	static int proximoNumConta = 0;
 	do {
 		contaJaExiste = false;
-		index = banco.getIndexContaPorNumConta(proximoNumConta, numContasExistentes);
+		index = banco.getIndexContaPoupancaPorNumConta(proximoNumConta, numContasExistentes);
 		if (index >= 0) {
 			contaJaExiste = true;
 			proximoNumConta++;
@@ -30,18 +30,22 @@ ContaPoupanca::ContaPoupanca(Cliente& _cliente, const vector <int> numContasExis
 	saldo = 0;
 	cliente = _cliente;
 	vector<Movimentacao> movimentacoes;
+	diasBase = _diasBase;
 }
-ContaPoupanca::ContaPoupanca(Cliente _cliente, int _numConta) {
+ContaPoupanca::ContaPoupanca() {
+}
+ContaPoupanca::ContaPoupanca(const Cliente& _cliente, const int& _numConta, const vector<DiaBase>& _diasBase = vector<DiaBase>()) {
 	static int proximoNumConta = _numConta + 1;
 	numConta = _numConta;
 	saldo = 0;
 	cliente = _cliente;
 	vector<Movimentacao> movimentacoes;
+	diasBase = _diasBase;
 }
 ContaPoupanca::~ContaPoupanca() {
 }
 
-double ContaPoupanca::getSaldo() const {
+double ContaPoupanca::getSaldo() {
 	int saldo = 0;
 	for (unsigned int i = 0; i < diasBase.size(); i++) {
 		saldo += diasBase.at(i).getSaldo();
@@ -49,37 +53,38 @@ double ContaPoupanca::getSaldo() const {
 	return saldo;
 }
 
-DiaBase ContaPoupanca::getMaiorDiaBaseComSaldo() {
+int ContaPoupanca::getIndexMaiorDiaBaseComSaldo() {
 	DiaBase maiorDiaBase = diasBase.at(0);
+	int index = 0;
 
 	for (unsigned int i = 1; i < diasBase.size(); i++) {
 		if (diasBase.at(i).getDia() > maiorDiaBase.getDia() && diasBase.at(i).getSaldo() > 0) {
 			maiorDiaBase = diasBase.at(i);
+			index = i;
 		}
 	}
-	return maiorDiaBase;
+	return index;
 }
 
 int ContaPoupanca::debitarConta(double valor, string descricaoMovimentacao)
 {
 	if (getSaldo() >= valor) {
-		DiaBase maiorDiaBase = getMaiorDiaBaseComSaldo();
+		int index = getIndexMaiorDiaBaseComSaldo();
 
-		if (maiorDiaBase.getSaldo() >= valor) {
-			maiorDiaBase.addToSaldo(-valor);
+		if (diasBase[index].getSaldo() >= valor) {
+			diasBase[index].addToSaldo(-valor);
 
 			Movimentacao novaMovimentacao = Movimentacao(descricaoMovimentacao, 'D', valor, numConta);
 			movimentacoes.push_back(novaMovimentacao);
-
 			return 1;
 		}
 		else {
-			maiorDiaBase.addToSaldo(-maiorDiaBase.getSaldo());
+			valor -= diasBase[index].getSaldo();
+			diasBase[index].addToSaldo(-diasBase[index].getSaldo());
 
-			Movimentacao novaMovimentacao = Movimentacao(descricaoMovimentacao, 'D', maiorDiaBase.getSaldo(), numConta);
-			movimentacoes.push_back(novaMovimentacao);
+			/*Movimentacao novaMovimentacao = Movimentacao(descricaoMovimentacao, 'D', maiorDiaBase.getSaldo(), numConta);
+			movimentacoes.push_back(novaMovimentacao);*/
 
-			valor -= maiorDiaBase.getSaldo();
 			debitarConta(valor, descricaoMovimentacao);
 		}
 	}
@@ -116,13 +121,13 @@ void ContaPoupanca::criarDiaBase(int dia, double valor) {
 	DiaBase diaBase = DiaBase(dia, valor);
 }
 
-//void ContaPoupanca::restaurarMovimentacao(Movimentacao _movimentacao) {
-//	movimentacoes.push_back(_movimentacao);
-//}
+void ContaPoupanca::restaurarMovimentacao(Movimentacao _movimentacao) {
+	movimentacoes.push_back(_movimentacao);
+}
 
-//void  ContaPoupanca::restaurarSaldo(double _valor) {
-//	saldo += _valor;
-//}
+void  ContaPoupanca::restaurarSaldo(double _valor) {
+	saldo += _valor;
+}
 
 int ContaPoupanca::getIndexDiaBase(int dia) {
 	int index = -1;

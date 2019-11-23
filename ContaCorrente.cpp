@@ -60,3 +60,7 @@ void ContaCorrente::restaurarMovimentacao(Movimentacao _movimentacao) {
 void ContaCorrente::restaurarSaldo(double _valor) {
 	saldo += _valor;
 }
+
+double ContaCorrente::getSaldo() {
+	return saldo;
+}
