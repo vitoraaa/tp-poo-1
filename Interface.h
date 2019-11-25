@@ -6,7 +6,8 @@ class Interface
 public:
 	Interface();
 	~Interface();
-	void lerDB();
+	void inicializarAplicacao();
+	/*void lerDB();
 	void escreverDB(bool voltarAoMenu);
 	void escreverContasPoupancaDB();
 	void escreverContasCorrentesDB();
@@ -16,6 +17,7 @@ public:
 	void lerContasCorrentesDB();
 	void lerContasPoupancaDB();
 	void lerClientesDB();
+	void listarDiasBase(const int& numConta);
 	void lerMovimentacoesContasCorrentesDB();
 	void lerMovimentacoesContasPoupancaDB();
 	void apresentarMenu();
@@ -29,7 +31,6 @@ public:
 	void cobrarTarifa();
 	void cobrarCPMF();
 	void obterSaldo();
-	void inicializarAplicacao();
 	void obterExtrato();
 	void fecharAplicacao();
 	string getOpcaoUsuario();
@@ -39,5 +40,5 @@ public:
 	void listarContasCorrentes(bool voltarAoMenu);
 	void listarContasPoupanca(bool voltarAoMenu);
 	void listarMovimentacoes(std::vector <Movimentacao> movimentacoes);
-	vector<string> splitString(string str, string delimitador);
+	vector<string> splitString(string str, string delimitador);*/
 };

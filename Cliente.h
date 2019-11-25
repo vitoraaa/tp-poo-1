@@ -6,21 +6,21 @@ class Cliente
 {
 private:
 	string nome;
-	string cpf_cnpj;
+	string cpfcnpj;
 	string endereco;
 	string fone;
 public:
 
-	Cliente(string _nome, string _cpf_cnpj, string _endereco, string _fone);
+	Cliente(string nome, string cpfcnpj, string endereco, string fone);
 	Cliente();
 	~Cliente();
 
-	string getNome();
+	string getNome() const;
 	void setNome(string nome);
-	string getCPF_CNPF();
-	void setCPF_CNPF(string CPF_CNPJ);
-	string getEndereco();
+	string getCPFCNPF() const;
+	void setCPFCNPF(string CPFCNPJ);
+	string getEndereco()const;
 	void setEndereco(string Endereco);
-	string getFone();
+	string getFone() const;
 	void setFone(string Fone);
 };

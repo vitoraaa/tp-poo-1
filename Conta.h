@@ -10,24 +10,20 @@ using namespace std;
 class Conta
 {
 protected:
-	int numConta;
-	double saldo;
-	Cliente cliente;
-	vector<Movimentacao> movimentacoes;
+	int _numConta;
+	double _saldo;
+	Cliente _cliente;
+	vector<Movimentacao> _movimentacoes;
 
 public:
-	Conta();
-	/*Conta(Cliente _cliente, vector <int> numContasExistentes);
-	Conta(Cliente _cliente, int _numConta);*/
-	~Conta();
 
-	int getNumConta();
-	Cliente getCliente();
-	vector<Movimentacao> getMovimentacoes();
+	int getNumConta()const { return _numConta; };
+	Cliente getCliente()const { return _cliente; };
+	vector<Movimentacao> getMovimentacoes()const { return _movimentacoes; };
 
-	virtual int debitarConta(double _valor, string _descricaoMovimentacao) = 0;
-	virtual void creditarConta(int _valor, string _descricaoMovimentacao) = 0;
-	virtual void restaurarMovimentacao(Movimentacao _movimentacao) = 0;
-	virtual void restaurarSaldo(double _valor) = 0;
-	//virtual double getSaldo();
+	virtual double getSaldo() const = 0;
+	virtual bool debitarConta(const double& valor, const string& descricaoMovimentacao) = 0;
+	virtual void creditarConta(const int& valor, const string& descricaoMovimentacao) = 0;
+	virtual void adicionarMovimentacao(const Movimentacao& movimentacao) = 0;
+	virtual void somarSaldo(const double& valor) = 0;
 };

@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Interface.h"
 #include <time.h>
 #include "Cliente.h"

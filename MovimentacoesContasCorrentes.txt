@@ -1,1 +1,1 @@
-1234,16161654,c,movimentacao teste,1400,cc,;1234,1574465181,C,Deposito,2,cc,;1234,1574465294,C,Deposito,3,cc,;1234,1574465465,C,Deposito,98,cc,;1234,1574465669,D,Saque,100,cc,;
+0,1574649833,C,Deposito,76000,cc,;0,1574649851,D,Saque,80000,cc,;

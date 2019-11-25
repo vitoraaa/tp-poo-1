@@ -4,23 +4,23 @@ class ContaCorrente :
 	public  Conta
 {
 private:
-	double limiteCredito;
+	double _limiteCredito;
 
 public:
 
-	ContaCorrente(Cliente _cliente, const vector <int> numContasExistentes, double _limiteCredito);
-	ContaCorrente(Cliente _cliente, int _numConta, double _limiteCredito);
+	ContaCorrente(const Cliente& cliente, vector <int> numContasExistentes, const double& limiteCredito);
+	ContaCorrente(const  Cliente& cliente, const int& numConta, const double& limiteCredito);
 	~ContaCorrente();
 
-	virtual double getSaldo();
+	virtual double getSaldo()const;
 
-	virtual int debitarConta(double _valor, string _descricaoMovimentacao);
+	virtual bool debitarConta(const double& valor, const string& descricaoMovimentacao);
 
-	virtual void creditarConta(int _valor, string _descricaoMovimentacao);
+	virtual void creditarConta(const int& valor, const string& descricaoMovimentacao);
 
-	virtual void restaurarMovimentacao(Movimentacao _movimentacao);
+	virtual void adicionarMovimentacao(const Movimentacao& movimentacao);
 
-	virtual void restaurarSaldo(double _valor);
+	virtual void somarSaldo(const double& valor);
 
-	double getLimiteCredito() { return limiteCredito; };
+	double getLimiteCredito()const { return _limiteCredito; };
 };

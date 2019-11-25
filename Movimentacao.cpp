@@ -33,11 +33,11 @@ Movimentacao::Movimentacao()
 	numConta = -1;
 }
 
-string Movimentacao::getDescricao()
+string Movimentacao::getDescricao() const
 {
 	return descricao;
 }
-struct tm Movimentacao::getDataMov()
+struct tm Movimentacao::getDataMov() const
 {
 	struct tm dataMov;
 
@@ -45,18 +45,18 @@ struct tm Movimentacao::getDataMov()
 	return dataMov;
 }
 
-time_t Movimentacao::getRawDataMov() {
+time_t Movimentacao::getRawDataMov() const {
 	return rawDataMov;
 }
-char Movimentacao::getDebitoCredito()
+char Movimentacao::getDebitoCredito() const
 {
 	return debitoCredito;
 }
-double Movimentacao::getValor()
+double Movimentacao::getValor() const
 {
 	return valor;
 }
-int Movimentacao::getNumConta()
+int Movimentacao::getNumConta() const
 {
 	return numConta;
 }

@@ -17,10 +17,10 @@ public:
 	~Movimentacao();
 	Movimentacao();
 
-	string getDescricao();
-	struct tm getDataMov();
-	time_t getRawDataMov();
-	char getDebitoCredito();
-	double getValor();
-	int getNumConta();
+	string getDescricao()const;
+	struct tm getDataMov()const;
+	time_t getRawDataMov()const;
+	char getDebitoCredito()const;
+	double getValor()const;
+	int getNumConta()const;
 };

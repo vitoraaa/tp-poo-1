@@ -6,9 +6,9 @@ DiaBase::DiaBase() {
 void DiaBase::addToSaldo(double valor) {
 	saldo += valor;
 }
-DiaBase::DiaBase(int _diaBase, double _saldoDiaBase) {
-	dia = _diaBase;
-	saldo = _saldoDiaBase;
+DiaBase::DiaBase(int diaBase, double saldoDiaBase) {
+	dia = diaBase;
+	saldo = saldoDiaBase;
 }
 DiaBase::~DiaBase() {
 }

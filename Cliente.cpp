@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "Cliente.h"
 
-Cliente::Cliente(string _nome, string _cpf_cnpj, string _endereco, string _fone)
+Cliente::Cliente(string nome, string cpfcnpj, string endereco, string fone)
 {
-	nome = _nome;
-	cpf_cnpj = _cpf_cnpj;
-	endereco = _endereco;
-	fone = _fone;
+	nome = nome;
+	cpfcnpj = cpfcnpj;
+	endereco = endereco;
+	fone = fone;
 }
 
 Cliente::Cliente()
@@ -17,7 +17,7 @@ Cliente::~Cliente()
 {
 }
 
-string Cliente::getNome()
+string Cliente::getNome() const
 {
 	return nome;
 }
@@ -25,15 +25,15 @@ void Cliente::setNome(string Nome)
 {
 	nome = Nome;
 }
-string Cliente::getCPF_CNPF()
+string Cliente::getCPFCNPF() const
 {
-	return cpf_cnpj;
+	return cpfcnpj;
 }
-void Cliente::setCPF_CNPF(string CPF_CNPJ)
+void Cliente::setCPFCNPF(string CPFCNPJ)
 {
-	cpf_cnpj = CPF_CNPJ;
+	cpfcnpj = CPFCNPJ;
 }
-string Cliente::getEndereco()
+string Cliente::getEndereco() const
 {
 	return endereco;
 }
@@ -41,7 +41,7 @@ void Cliente::setEndereco(string Endereco)
 {
 	endereco = Endereco;
 }
-string Cliente::getFone()
+string Cliente::getFone() const
 {
 	return fone;
 }
