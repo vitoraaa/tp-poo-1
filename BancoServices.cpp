@@ -69,9 +69,7 @@ void BancoServices::escreverClientesDB() {
 	myfile.open("Clientes.txt");
 	vector <Cliente> clientes = banco.listarClientes();
 	for (unsigned int i = 0; i < clientes.size(); i++) {
-		if (clientes[i].getNome() != "CLIENTENAOENCONTRADO") {
-			myfile << clientes[i].getNome() << "," << clientes[i].getCPFCNPF() << "," << clientes[i].getFone() << "," << clientes[i].getEndereco() << "," << ";";
-		}
+		myfile << clientes[i].getNome() << "," << clientes[i].getCPFCNPF() << "," << clientes[i].getFone() << "," << clientes[i].getEndereco() << "," << ";";
 	}
 
 	myfile.close();
@@ -175,8 +173,12 @@ void BancoServices::lerContasCorrentesDB() {
 		stringConta = arrayStringContas[i];
 
 		arrayStringCamposConta = splitString(stringConta, ",");
-
-		cliente = banco.buscaClienteCPFCNPJ(arrayStringCamposConta[1]);
+		try {
+			cliente = banco.buscaClienteCPFCNPJ(arrayStringCamposConta[1]);
+		}
+		catch (exception excecao) {
+			if (string(excecao.what()) == "ClienteNaoEncontrado") continue;
+		}
 
 		int numeroConta = stoi(arrayStringCamposConta[0]);
 
@@ -205,14 +207,18 @@ void BancoServices::lerContasPoupancaDB() {
 		stringConta = arrayStringContas[i];
 
 		arrayStringCamposConta = splitString(stringConta, ",");
-
-		cliente = banco.buscaClienteCPFCNPJ(arrayStringCamposConta[1]);
+		try {
+			cliente = banco.buscaClienteCPFCNPJ(arrayStringCamposConta[1]);
+		}
+		catch (exception excecao) {
+			if (string(excecao.what()) == "ClienteNaoEncontrado") continue;
+		}
 
 		int numeroConta = stoi(arrayStringCamposConta[0]);
 		vector<DiaBase> diasBase;
 
 		for (int j = 2; j < arrayStringCamposConta.size(); j += 2) {
-			DiaBase diaBase = DiaBase(stoi(arrayStringCamposConta[j]), stod(arrayStringCamposConta.at(int(j + 1))));
+			DiaBase diaBase = DiaBase(stoi(arrayStringCamposConta[j]), stod(arrayStringCamposConta[j + 1]));
 			diasBase.push_back(diaBase);
 		}
 

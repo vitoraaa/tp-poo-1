@@ -2,14 +2,13 @@
 class DiaBase
 {
 private:
-	int dia;
-	double saldo;
+	int _dia;
+	double _saldo;
 public:
-	double getSaldo() const { return saldo; };
+	double getSaldo() const { return _saldo; };
 	void addToSaldo(double valor);
-	int getDia() const { return dia; };
+	int getDia() const { return _dia; };
 
-	DiaBase();
-	DiaBase(int diaBase, double saldoDiaBase);
+	DiaBase(int dia, double saldo);
 	~DiaBase();
 };

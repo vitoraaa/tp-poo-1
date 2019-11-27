@@ -30,6 +30,7 @@ string getOpcaoUsuario();
 string consultarUsuarioTipoConta();
 struct tm montaData(char c);
 void listarClientes();
+void creditarJuros();
 void listarContasCorrentes();
 void listarContasPoupanca();
 void listarMovimentacoes(vector <Movimentacao> movimentacoes);
@@ -69,12 +70,13 @@ void apresentarMenu()
 	std::cout << "g - Efetuar uma transferencia\n";
 	std::cout << "h - Cobrar tarifa\n";
 	std::cout << "i - Cobrar CPMF\n";
-	std::cout << "j - Obter saldo\n";
-	std::cout << "k - Obter extrato\n";
-	std::cout << "l - Listar clientes\n";
-	std::cout << "m - Listar contas\n";
-	std::cout << "n - Salvar dados\n";
-	std::cout << "o - Fechar a aplicacao\n";
+	std::cout << "j - Creditar juros\n";
+	std::cout << "k - Obter saldo\n";
+	std::cout << "l - Obter extrato\n";
+	std::cout << "m - Listar clientes\n";
+	std::cout << "n - Listar contas\n";
+	std::cout << "o - Salvar dados\n";
+	std::cout << "p - Fechar a aplicacao\n";
 
 	opcaoUsuario = getOpcaoUsuario();
 
@@ -115,27 +117,30 @@ void apresentarMenu()
 	}
 
 	else if (opcaoUsuario == "j") {
+		creditarJuros();
+	}
+	else if (opcaoUsuario == "k") {
 		obterSaldo();
 	}
 
-	else if (opcaoUsuario == "k") {
+	else if (opcaoUsuario == "l") {
 		obterExtrato();
 	}
 
-	else if (opcaoUsuario == "l") {
+	else if (opcaoUsuario == "m") {
 		listarClientes();
 	}
 
-	else if (opcaoUsuario == "m") {
+	else if (opcaoUsuario == "n") {
 		listarContas();
 	}
 
-	else if (opcaoUsuario == "n") {
+	else if (opcaoUsuario == "o") {
 		BancoServices.escreverDB();
 		apresentarMenu();
 	}
 
-	else if (opcaoUsuario == "o") {
+	else if (opcaoUsuario == "p") {
 		fecharAplicacao();
 	}
 
@@ -192,13 +197,8 @@ void criarConta()
 		std::cin >> cpfcnpj;
 		std::cin.clear();
 	}
-	Cliente cliente = BancoServices.banco.buscaClienteCPFCNPJ(cpfcnpj);
-	if (cliente.getNome() == "CLIENTENAOENCONTRADO")
-	{
-		cout << "\n\nO cliente com CPF/CNPJ " << cpfcnpj << " nao foi encontrado em nossa base de dados\n\n";
-	}
-	else
-	{
+	try {
+		Cliente cliente = BancoServices.banco.buscaClienteCPFCNPJ(cpfcnpj);
 		string tipoConta = consultarUsuarioTipoConta();
 
 		if (tipoConta == "cc") {
@@ -215,6 +215,10 @@ void criarConta()
 
 		cout << "\n\nConta criada com sucesso";
 	}
+	catch (exception excecao) {
+		if (string(excecao.what()) == "ClienteNaoEncontrado")
+			cout << "\n\nO cliente com CPF/CNPJ " << cpfcnpj << " nao foi encontrado em nossa base de dados\n\n";
+	}
 	finalizarAcaoUsuario();
 }
 
@@ -230,15 +234,15 @@ void excluirConta() {
 	}
 
 	string tipoConta = consultarUsuarioTipoConta();
-
-	int status = BancoServices.banco.excluirConta(numConta, tipoConta);
-	if (status == 1)
-	{
+	try {
+		BancoServices.banco.excluirConta(numConta, tipoConta);
 		std::cout << "A conta de numero " << numConta << " foi excluida";
 	}
-	else {
-		std::cout << "A conta de numero " << numConta << " nao foi encontrada";
+	catch (exception excecao) {
+		if (string(excecao.what()) == "ContaNaoEncontrada")
+			std::cout << "A conta de numero " << numConta << " nao foi encontrada";
 	}
+
 	finalizarAcaoUsuario();
 }
 
@@ -422,7 +426,7 @@ void obterSaldo()
 	}
 
 	if (saldo != -1) {
-		std::cout << "\n\nSaldo\n\n" << saldo;
+		cout << "Saldo total : " << saldo << "\n";
 		if (tipoConta == "p")listarDiasBase(numConta);
 	}
 	else {
@@ -508,6 +512,7 @@ void obterExtrato()
 void listarClientes()
 {
 	inicializarCabecalho("Clientes");
+
 	vector<Cliente> clientes = BancoServices.banco.listarClientes();
 	for (unsigned int i = 0; i < clientes.size(); i++)
 	{
@@ -517,6 +522,7 @@ void listarClientes()
 		std::cout << "\nTelefone: " << clientes[i].getFone();
 		std::cout << "\n#####################################################";
 	}
+
 	finalizarAcaoUsuario();
 }
 
@@ -524,15 +530,17 @@ void listarContas() {
 	string tipoConta = consultarUsuarioTipoConta();
 	if (tipoConta == "cc") {
 		listarContasCorrentes();
-	}else if(tipoConta == "p") {
+	}
+	else if (tipoConta == "p") {
 		listarContasPoupanca();
 	}
 	finalizarAcaoUsuario();
 }
+
 void listarContasCorrentes()
 {
 	vector<ContaCorrente> contas = BancoServices.banco.listarContasCorrentes();
-	if(contas.size()>0) inicializarCabecalho("Contas correntes");
+	if (contas.size() > 0) inicializarCabecalho("Contas correntes");
 
 	for (unsigned int i = 0; i < contas.size(); i++)
 	{
@@ -584,34 +592,36 @@ void excluirCliente()
 		std::cin >> cpfcnpj;
 		std::cin.clear();
 	}
-	int status = BancoServices.banco.excluirCliente(cpfcnpj);
-	if (status == 1)
-	{
+	try {
+		BancoServices.banco.excluirCliente(cpfcnpj);
 		std::cout << "O cliente de CPF/CNPJ " << cpfcnpj << " foi excluido";
 	}
-	else if (status == 2)
-	{
-		std::cout << "O cliente de CPF/CNPJ " << cpfcnpj << " ainda possui contas(s) ativa(s) e nao pode ser excluido";
+	catch (exception excecao) {
+		if (string(excecao.what()) == "ClienteComContaAtiva")
+		{
+			std::cout << "O cliente de CPF/CNPJ " << cpfcnpj << " ainda possui contas(s) ativa(s) e nao pode ser excluido";
+		}
+		else if (string(excecao.what()) == "ClienteNaoEncontrado")
+		{
+			std::cout << "O cliente nao foi encontrado";
+		}
 	}
-	else
-	{
-		std::cout << "O cliente nao foi encontrado";
-	}
+
 	finalizarAcaoUsuario();
 }
+
 void listarDiasBase(const int& numConta) {
 	inicializarCabecalho("Dias base", false);
 	int index = BancoServices.banco.getIndexConta(numConta);
 	if (index >= 0) {
 		vector<DiaBase> diasBase = BancoServices.banco.obterDiasBase(numConta, index);
 		if (diasBase.size() > 0) {
-			std::cout << "\n\nDias base\n";
-
 			for (unsigned int i = 0; i < diasBase.size(); i++) {
 				std::cout << "\nDia : " << diasBase[i].getDia() << " Saldo : " << diasBase[i].getSaldo();
 			}
 		}
 	}
+	//cout << "\nTotal : " << BancoServices.banco.listarContasPoupanca()[index].getSaldo();
 }
 
 struct tm montaData(char c) {
@@ -685,4 +695,10 @@ void finalizarAcaoUsuario()
 	cout << "\n\n";
 	system("pause");
 	apresentarMenu();
+}
+
+void creditarJuros() {
+	inicializarCabecalho("Juros cobrados");
+	BancoServices.banco.creditarJuros();
+	finalizarAcaoUsuario();
 }

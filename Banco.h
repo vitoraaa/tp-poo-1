@@ -10,10 +10,10 @@ using namespace std;
 class Banco
 {
 private:
-	string nomeBanco;
-	vector <Cliente> clientes;
-	vector <ContaCorrente> contasCorrentes;
-	vector <ContaPoupanca> contasPoupanca;
+	string _nomeBanco;
+	vector <Cliente> _clientes;
+	vector <ContaCorrente> _contasCorrentes;
+	vector <ContaPoupanca> _contasPoupanca;
 public:
 	Banco(string nomeBanco);
 	~Banco();
@@ -23,13 +23,14 @@ public:
 	void criarContaCorrente(const Cliente& cliente, const int& numConta, const double& limiteCredito);
 	void criarContaPoupanca(const Cliente& cliente, const int& numConta, const vector<DiaBase>& diasBase);
 	void criarContaPoupanca(const Cliente& cliente);
-	int excluirCliente(const string& cnpcnpj);
-	int excluirConta(const int& numConta, const string& tipoConta);
+	void excluirCliente(const string& cnpcnpj);
+	void excluirConta(const int& numConta, const string& tipoConta);
 	void efetuarDeposito(const int& numConta, const int& valor, const string& tipoConta, const int& index);
 	int efetuarSaque(const int& numConta, const int& valor, const string& tipoConta, const int& index);
 	int efetuarTransferencia(const int& numContaOrigem, const string& tipoContaOrigem, const int& numContaDestino, const string& tipoContaDestino, const int& valor);
 	void cobrarTarifa();
 	void cobrarCPMF();
+	void creditarJuros();
 	double obterSaldoContaCorrente(const int& numConta);
 	vector<DiaBase> obterDiasBase(const int& numConta, const int& index);
 	double obterSaldoContaPoupanca(const int& numConta);
@@ -46,7 +47,7 @@ public:
 	int getIndexContaCorrentePorNumConta(const int& numConta, const vector<int>& numContasExistentes);
 	int getIndexConta(const int& numConta);
 	//int getIndexConta(const int& numConta, const vector<int>& numContasExistentes);
-	vector<ContaPoupanca> buscarContaPoupancaPorCliente(const Cliente& cliente);
-	vector<ContaCorrente> buscarContaCorrentePorCliente(const Cliente& cliente);
+	vector<ContaPoupanca> buscarContasPoupancaPorCliente(const Cliente& cliente);
+	vector<ContaCorrente> buscarContasCorrentesPorCliente(const Cliente& cliente);
 	double calcularCPMF(const int& index, const string& tipoConta);
 };

@@ -75,7 +75,11 @@ bool ContaPoupanca::debitarConta(const double& valor, const string& descricaoMov
 	}
 	else return 0;
 }
-
+void ContaPoupanca::creditarJuros(const int& index) {
+	auto valor = _diasBase[index].getSaldo() * 0.01;
+	somarSaldoDiaBase(index, valor);
+	_movimentacoes.push_back(Movimentacao("Juros", 'C', valor, _numConta));
+}
 void ContaPoupanca::somarSaldoDiaBase(const int& index, const double& valor) {
 	_diasBase.at(index).addToSaldo(valor);
 }

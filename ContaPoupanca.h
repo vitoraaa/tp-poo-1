@@ -24,4 +24,5 @@ public:
 	int getIndexDiaBase(const int& diaBase) const;
 	void somarSaldoDiaBase(const int& index, const double& valor);
 	void adicionarDiaBase(const int& dia, const double& valor);
+	void creditarJuros(const int& index);
 };

@@ -13,6 +13,7 @@
 static class BancoServices
 {
 public:
+	
 	Banco banco;
 	int diaHoje();
 	int getIndexConta(const int& numConta, const vector<int>& numContasPoupancaExistentes);

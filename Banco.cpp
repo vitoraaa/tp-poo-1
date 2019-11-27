@@ -5,11 +5,15 @@
 #include <time.h>
 #include <algorithm>
 #include "ContaCorrente.h"
+#include "BancoServices.h"
 #include "ContaPoupanca.h"
 
 Banco::Banco(string nomeBanco)
 {
-	nomeBanco = nomeBanco;
+	_nomeBanco = nomeBanco;
+	_clientes = vector<Cliente>();
+	_contasCorrentes = vector<ContaCorrente>();
+	_contasPoupanca = vector<ContaPoupanca>();
 }
 
 Banco::~Banco()
@@ -26,111 +30,113 @@ void preencherNumContaExistentes(const vector<ContaPoupanca>& contasPoupanca, ve
 }
 Cliente Banco::buscaClienteCPFCNPJ(const string& cpfcnpj)
 {
-	for (auto i = clientes.begin(); i != clientes.end(); i++)
+	for (auto i = _clientes.begin(); i != _clientes.end(); i++)
 	{
 		if ((*i).getCPFCNPF() == cpfcnpj)
 		{
 			return (*i);
 		}
 	}
-	Cliente clienteNaoEncontrado = Cliente("CLIENTENAOENCONTRADO", "CLIENTENAOENCONTRADO", "CLIENTENAOENCONTRADO", "CLIENTENAOENCONTRADO");
-	return clienteNaoEncontrado;
+	throw runtime_error("ClienteNaoEncontrado");
 }
 
 void Banco::cadastrarCliente(const Cliente& cliente)
 {
-	clientes.push_back(cliente);
+	_clientes.push_back(cliente);
 }
+void Banco::creditarJuros()
+{
+	auto hoje = BancoServices.diaHoje();
 
+	for (unsigned int i = 0; i < _contasPoupanca.size(); i++) {
+		auto index = _contasPoupanca[i].getIndexDiaBase(hoje);
+		if (index >= 0)_contasPoupanca[i].creditarJuros(index);
+	}
+}
 void Banco::criarContaCorrente(const Cliente& cliente, const double& limiteCredito)
 {
 	vector<int> numContasExistentes;
-	for (unsigned int i = 0; i < contasCorrentes.size(); i++) {
-		numContasExistentes.push_back(contasCorrentes[i].getNumConta());
+	for (unsigned int i = 0; i < _contasCorrentes.size(); i++) {
+		numContasExistentes.push_back(_contasCorrentes[i].getNumConta());
 	}
 
 	ContaCorrente conta = ContaCorrente(cliente, numContasExistentes, limiteCredito);
-	contasCorrentes.push_back(conta);
+	_contasCorrentes.push_back(conta);
 }
 
 void Banco::criarContaCorrente(const Cliente& cliente, const int& numConta, const double& limiteCredito = 0)
 {
 	ContaCorrente conta = ContaCorrente(cliente, numConta, limiteCredito);
-	contasCorrentes.push_back(conta);
+	_contasCorrentes.push_back(conta);
 }
 
 void Banco::criarContaPoupanca(const Cliente& cliente)
 {
 	vector<int> numContasExistentes = vector<int>();
-	preencherNumContaExistentes(contasPoupanca, numContasExistentes);
+	preencherNumContaExistentes(_contasPoupanca, numContasExistentes);
 	ContaPoupanca conta = ContaPoupanca(cliente, numContasExistentes);
-	contasPoupanca.push_back(conta);
+	_contasPoupanca.push_back(conta);
 }
 
 void Banco::criarContaPoupanca(const Cliente& cliente, const int& numConta, const vector<DiaBase>& diasBase)
 {
 	ContaPoupanca conta = ContaPoupanca(cliente, numConta, diasBase);
-	contasPoupanca.push_back(conta);
+	_contasPoupanca.push_back(conta);
 }
 
-int Banco::excluirCliente(const string& cpfcnpj)
+void Banco::excluirCliente(const string& cpfcnpj)
 {
-	auto i = clientes.begin();
+	auto i = _clientes.begin();
 
-	for (auto i = clientes.begin(); i != clientes.end(); i++)
+	for (auto i = _clientes.begin(); i != _clientes.end(); i++)
 	{
 		if ((*i).getCPFCNPF() == cpfcnpj)
 		{
-			if (buscarContaPoupancaPorCliente(*i).size() == 0 && buscarContaCorrentePorCliente(*i).size() == 0)   //o cliente nao tem nenhuma conta
+			if (buscarContasPoupancaPorCliente(*i).size() == 0 && buscarContasCorrentesPorCliente(*i).size() == 0)   //o cliente nao tem nenhuma conta
 			{
-				clientes.erase(i);
-				return 1;
+				_clientes.erase(i); return;
 			}
-			else
-			{
-				return 2;
-			}
+			else throw exception("ClienteComContaAtiva");
 		}
 	}
-	return 0;
+	throw exception("ClienteNaoEncontrado");
 }
 
-int Banco::excluirConta(const int& numConta, const string& tipoConta)
+void Banco::excluirConta(const int& numConta, const string& tipoConta)
 {
 	if (tipoConta == "cc") {
-		auto i = contasCorrentes.begin();
+		auto i = _contasCorrentes.begin();
 
-		for (auto i = contasCorrentes.begin(); i != contasCorrentes.end(); i++)
+		for (auto i = _contasCorrentes.begin(); i != _contasCorrentes.end(); i++)
 		{
 			if ((*i).getNumConta() == numConta)
 			{
-				contasCorrentes.erase(i);
-				return 1;
+				_contasCorrentes.erase(i); return;
 			}
 		}
+		throw exception("ContaNaoEncontrada");
 	}
 	else if (tipoConta == "p") {
-		auto i = contasPoupanca.begin();
+		auto i = _contasPoupanca.begin();
 
-		for (auto i = contasPoupanca.begin(); i != contasPoupanca.end(); i++)
+		for (auto i = _contasPoupanca.begin(); i != _contasPoupanca.end(); i++)
 		{
 			if ((*i).getNumConta() == numConta)
 			{
-				contasPoupanca.erase(i);
-				return 1;
+				_contasPoupanca.erase(i); return;
 			}
 		}
+		throw exception("ContaNaoEncontrada");
 	}
-	return 0;
 }
 
 void Banco::efetuarDeposito(const int& numConta, const int& valor, const string& tipoConta, const int& index)
 {
 	if (tipoConta == "cc") {
-		contasCorrentes[index].creditarConta(valor, "Deposito");
+		_contasCorrentes[index].creditarConta(valor, "Deposito");
 	}
 	else if (tipoConta == "p") {
-		contasPoupanca[index].creditarConta(valor, "Deposito");
+		_contasPoupanca[index].creditarConta(valor, "Deposito");
 	}
 }
 
@@ -139,11 +145,11 @@ int Banco::efetuarSaque(const int& numConta, const int& valor, const string& tip
 	int status = 0;
 
 	if (tipoConta == "cc") {
-		status = contasCorrentes[index].debitarConta(valor, "Saque");
+		status = _contasCorrentes[index].debitarConta(valor, "Saque");
 		return status;
 	}
 	else if (tipoConta == "p") {
-		status = contasPoupanca[index].debitarConta(valor, "Saque");
+		status = _contasPoupanca[index].debitarConta(valor, "Saque");
 		return status;
 	}
 	return 0;
@@ -159,14 +165,14 @@ int Banco::efetuarTransferencia(const int& numContaOrigem, const string& tipoCon
 	if (tipoContaOrigem == "cc") {
 		index = getIndexContaCorrentePorNumConta(numContaOrigem);
 		if (index != -1) {
-			status = contasCorrentes[index].debitarConta(valor, descricao);
+			status = _contasCorrentes[index].debitarConta(valor, descricao);
 			if (status == 1) {
 				if (tipoContaDestino == "cc") {
 					index = getIndexContaCorrentePorNumConta(numContaDestino);
 
 					if (index != -1) {
 						descricao = "Transferencia da conta " + std::to_string(numContaOrigem);
-						contasCorrentes[index].creditarConta(valor, descricao);
+						_contasCorrentes[index].creditarConta(valor, descricao);
 						return 1;
 					}
 				}
@@ -175,7 +181,7 @@ int Banco::efetuarTransferencia(const int& numContaOrigem, const string& tipoCon
 
 					if (index != -1) {
 						descricao = "Transferencia da conta " + std::to_string(numContaOrigem);
-						contasPoupanca[index].creditarConta(valor, descricao);
+						_contasPoupanca[index].creditarConta(valor, descricao);
 						return 1;
 					}
 				}
@@ -185,14 +191,14 @@ int Banco::efetuarTransferencia(const int& numContaOrigem, const string& tipoCon
 	else if (tipoContaOrigem == "p") {
 		index = getIndexConta(numContaOrigem);
 		if (index != -1) {
-			status = contasPoupanca[index].debitarConta(valor, descricao);
+			status = _contasPoupanca[index].debitarConta(valor, descricao);
 			if (status == 1) {
 				if (tipoContaDestino == "cc") {
 					index = getIndexContaCorrentePorNumConta(numContaDestino);
 
 					if (index != -1) {
 						descricao = "Transferencia da conta " + std::to_string(numContaOrigem);
-						contasCorrentes[index].creditarConta(valor, descricao);
+						_contasCorrentes[index].creditarConta(valor, descricao);
 						return 1;
 					}
 				}
@@ -201,7 +207,7 @@ int Banco::efetuarTransferencia(const int& numContaOrigem, const string& tipoCon
 
 					if (index != -1) {
 						descricao = "Transferencia da conta " + std::to_string(numContaOrigem);
-						contasPoupanca[index].creditarConta(valor, descricao);
+						_contasPoupanca[index].creditarConta(valor, descricao);
 						return 1;
 					}
 				}
@@ -214,25 +220,27 @@ int Banco::efetuarTransferencia(const int& numContaOrigem, const string& tipoCon
 
 void Banco::cobrarTarifa()
 {
-	for (unsigned int i = 0; i < contasCorrentes.size(); i++) {
-		contasCorrentes[i].debitarConta(15, "Cobranca de tarifa");
+	for (unsigned int i = 0; i < _contasCorrentes.size(); i++) {
+		_contasCorrentes[i].debitarConta(15, "Cobranca de tarifa");
 	}
-	for (unsigned int i = 0; i < contasPoupanca.size(); i++) {
-		contasPoupanca[i].debitarConta(15, "Cobranca de tarifa");
+	for (unsigned int i = 0; i < _contasPoupanca.size(); i++) {
+		_contasPoupanca[i].debitarConta(15, "Cobranca de tarifa");
 	}
 }
+
 vector<DiaBase> Banco::obterDiasBase(const int& numConta, const int& index) {
-	return contasPoupanca[index].getDiasBase();
+	return _contasPoupanca[index].getDiasBase();
 }
+
 void Banco::cobrarCPMF()
 {
-	for (unsigned int i = 0; i < contasPoupanca.size(); i++) {
+	for (unsigned int i = 0; i < _contasPoupanca.size(); i++) {
 		double valorCobrado = calcularCPMF(i, "p");
-		contasPoupanca[i].debitarConta(valorCobrado, "Cobranca de CPMF");
+		_contasPoupanca[i].debitarConta(valorCobrado, "Cobranca de CPMF");
 	}
-	for (unsigned int i = 0; i < contasCorrentes.size(); i++) {
+	for (unsigned int i = 0; i < _contasCorrentes.size(); i++) {
 		double valorCobrado = calcularCPMF(i, "cc");
-		contasCorrentes[i].debitarConta(valorCobrado, "Cobranca de CPMF");
+		_contasCorrentes[i].debitarConta(valorCobrado, "Cobranca de CPMF");
 	}
 }
 
@@ -240,7 +248,7 @@ double Banco::obterSaldoContaCorrente(const int& numConta)
 {
 	int index = getIndexContaCorrentePorNumConta(numConta);
 	if (index != -1) {
-		return contasCorrentes[index].getSaldo();
+		return _contasCorrentes[index].getSaldo();
 	}
 	else {
 		return -1;
@@ -251,7 +259,7 @@ double Banco::obterSaldoContaPoupanca(const int& numConta)
 {
 	int index = getIndexConta(numConta);
 	if (index != -1) {
-		return contasPoupanca[index].getSaldo();
+		return _contasPoupanca[index].getSaldo();
 	}
 	else {
 		return -1;
@@ -266,7 +274,7 @@ vector <Movimentacao> Banco::obterExtrato(const int& numConta, const string& tip
 	if (tipoConta == "cc") {
 		index = getIndexContaCorrentePorNumConta(numConta);
 		if (index >= 0) {
-			vector <Movimentacao> movimentacoes = contasCorrentes[index].getMovimentacoes();
+			vector <Movimentacao> movimentacoes = _contasCorrentes[index].getMovimentacoes();
 
 			time_t rawNow = time(0);
 			struct tm mesAtual;
@@ -284,7 +292,7 @@ vector <Movimentacao> Banco::obterExtrato(const int& numConta, const string& tip
 	else if (tipoConta == "p") {
 		index = getIndexConta(numConta);
 		if (index >= 0) {
-			vector <Movimentacao> movimentacoes = contasPoupanca[index].getMovimentacoes();
+			vector <Movimentacao> movimentacoes = _contasPoupanca[index].getMovimentacoes();
 
 			time_t rawNow = time(0);
 			struct tm mesAtual;
@@ -311,7 +319,7 @@ vector<Movimentacao> Banco::obterExtrato(const int& numConta, struct tm& dataIni
 		int index = getIndexContaCorrentePorNumConta(numConta);
 
 		if (index >= 0) {
-			vector<Movimentacao> movimentacoes = contasCorrentes[index].getMovimentacoes();
+			vector<Movimentacao> movimentacoes = _contasCorrentes[index].getMovimentacoes();
 
 			for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 				time_t rawDataMov = mktime(&movimentacoes[i].getDataMov());
@@ -327,7 +335,7 @@ vector<Movimentacao> Banco::obterExtrato(const int& numConta, struct tm& dataIni
 		int index = getIndexConta(numConta);
 
 		if (index >= 0) {
-			vector<Movimentacao> movimentacoes = contasPoupanca[index].getMovimentacoes();
+			vector<Movimentacao> movimentacoes = _contasPoupanca[index].getMovimentacoes();
 
 			for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 				time_t rawDataMov = mktime(&movimentacoes[i].getDataMov());
@@ -352,7 +360,7 @@ vector<Movimentacao> Banco::obterExtrato(const int& numConta, struct tm& dataIni
 	if (tipoConta == "cc") {
 		int index = getIndexContaCorrentePorNumConta(numConta);
 		if (index >= 0) {
-			vector<Movimentacao> movimentacoes = contasCorrentes[index].getMovimentacoes();
+			vector<Movimentacao> movimentacoes = _contasCorrentes[index].getMovimentacoes();
 
 			for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 				rawDataMov = mktime(&movimentacoes[i].getDataMov());
@@ -365,7 +373,7 @@ vector<Movimentacao> Banco::obterExtrato(const int& numConta, struct tm& dataIni
 	else if (tipoConta == "p") {
 		int index = getIndexConta(numConta);
 		if (index >= 0) {
-			vector<Movimentacao> movimentacoes = contasPoupanca[index].getMovimentacoes();
+			vector<Movimentacao> movimentacoes = _contasPoupanca[index].getMovimentacoes();
 
 			for (unsigned int i = 0; i < movimentacoes.size(); i++) {
 				rawDataMov = mktime(&movimentacoes[i].getDataMov());
@@ -381,22 +389,22 @@ vector<Movimentacao> Banco::obterExtrato(const int& numConta, struct tm& dataIni
 
 vector<Cliente> Banco::listarClientes()
 {
-	return clientes;
+	return _clientes;
 }
 
 vector<ContaCorrente> Banco::listarContasCorrentes()
 {
-	return contasCorrentes;
+	return _contasCorrentes;
 }
 vector<ContaPoupanca> Banco::listarContasPoupanca()
 {
-	return contasPoupanca;
+	return _contasPoupanca;
 }
 
-vector<ContaPoupanca> Banco::buscarContaPoupancaPorCliente(const Cliente& cliente)
+vector<ContaPoupanca> Banco::buscarContasPoupancaPorCliente(const Cliente& cliente)
 {
 	vector<ContaPoupanca> contasCliente;
-	for (auto i = contasPoupanca.begin(); i != contasPoupanca.end(); i++)
+	for (auto i = _contasPoupanca.begin(); i != _contasPoupanca.end(); i++)
 	{
 		if ((*i).getCliente().getCPFCNPF() == cliente.getCPFCNPF())
 		{
@@ -406,10 +414,10 @@ vector<ContaPoupanca> Banco::buscarContaPoupancaPorCliente(const Cliente& client
 	return contasCliente;
 }
 
-vector<ContaCorrente> Banco::buscarContaCorrentePorCliente(const Cliente& cliente)
+vector<ContaCorrente> Banco::buscarContasCorrentesPorCliente(const Cliente& cliente)
 {
 	vector<ContaCorrente> contasCliente;
-	for (auto i = contasCorrentes.begin(); i != contasCorrentes.end(); i++)
+	for (auto i = _contasCorrentes.begin(); i != _contasCorrentes.end(); i++)
 	{
 		if ((*i).getCliente().getCPFCNPF() == cliente.getCPFCNPF())
 		{
@@ -421,9 +429,9 @@ vector<ContaCorrente> Banco::buscarContaCorrentePorCliente(const Cliente& client
 
 int Banco::getIndexContaCorrentePorNumConta(const int& numConta)
 {
-	for (unsigned int i = 0; i < contasCorrentes.size(); i++)
+	for (unsigned int i = 0; i < _contasCorrentes.size(); i++)
 	{
-		if (contasCorrentes[i].getNumConta() == numConta)
+		if (_contasCorrentes[i].getNumConta() == numConta)
 		{
 			return i;
 		}
@@ -445,9 +453,9 @@ int Banco::getIndexContaCorrentePorNumConta(const int& numConta, const vector<in
 
 int Banco::getIndexConta(const int& numConta)
 {
-	for (unsigned int i = 0; i < contasPoupanca.size(); i++)
+	for (unsigned int i = 0; i < _contasPoupanca.size(); i++)
 	{
-		if (contasPoupanca[i].getNumConta() == numConta)
+		if (_contasPoupanca[i].getNumConta() == numConta)
 		{
 			return i;
 		}
@@ -466,10 +474,10 @@ double Banco::calcularCPMF(const int& indexConta, const string& tipoConta) {
 	localtime_s(&dataAtualMenosSeteDias, &rawdataAtualMenosSeteDias);
 
 	if (tipoConta == "cc") {
-		movimentacoesUltimosSeteDias = obterExtrato(contasCorrentes[indexConta].getNumConta(), dataAtualMenosSeteDias, tipoConta);
+		movimentacoesUltimosSeteDias = obterExtrato(_contasCorrentes[indexConta].getNumConta(), dataAtualMenosSeteDias, tipoConta);
 	}
 	else if (tipoConta == "p") {
-		movimentacoesUltimosSeteDias = obterExtrato(contasPoupanca[indexConta].getNumConta(), dataAtualMenosSeteDias, tipoConta);
+		movimentacoesUltimosSeteDias = obterExtrato(_contasPoupanca[indexConta].getNumConta(), dataAtualMenosSeteDias, tipoConta);
 	}
 
 	for (unsigned int i = 0; i < movimentacoesUltimosSeteDias.size(); i++) {
@@ -487,24 +495,24 @@ void Banco::adicionarMovimentacao(const int& numConta, const Movimentacao& movim
 	if (tipoConta == "cc") {
 		index = getIndexContaCorrentePorNumConta(numConta);
 		if (index >= 0) {
-			contasCorrentes[index].adicionarMovimentacao(movimentacao);
+			_contasCorrentes[index].adicionarMovimentacao(movimentacao);
 			if (movimentacao.getDebitoCredito() == 'C') {
-				contasCorrentes[index].somarSaldo(movimentacao.getValor());
+				_contasCorrentes[index].somarSaldo(movimentacao.getValor());
 			}
 			else if (movimentacao.getDebitoCredito() == 'D') {
-				contasCorrentes[index].somarSaldo(-movimentacao.getValor());
+				_contasCorrentes[index].somarSaldo(-movimentacao.getValor());
 			}
 		}
 	}
 	else if (tipoConta == "p") {
 		index = getIndexConta(numConta);
 		if (index >= 0) {
-			contasPoupanca[index].adicionarMovimentacao(movimentacao);
+			_contasPoupanca[index].adicionarMovimentacao(movimentacao);
 			if (movimentacao.getDebitoCredito() == 'C') {
-				contasPoupanca[index].somarSaldo(movimentacao.getValor());
+				_contasPoupanca[index].somarSaldo(movimentacao.getValor());
 			}
 			else if (movimentacao.getDebitoCredito() == 'D') {
-				contasPoupanca[index].somarSaldo(-movimentacao.getValor());
+				_contasPoupanca[index].somarSaldo(-movimentacao.getValor());
 			}
 		}
 	}
