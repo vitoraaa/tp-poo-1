@@ -1,0 +1,1 @@
+1,1575159133,C,Deposito,422342,cc,;1,1575159154,D,Transferencia para a conta 0,491,cc,;0,1575071498,C,Transferencia da conta 0,10,cc,;0,1575071628,D,Transferencia para a conta 0,500,cc,;0,1575159154,C,Transferencia da conta 1,491,cc,;

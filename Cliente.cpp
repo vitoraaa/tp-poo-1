@@ -3,10 +3,10 @@
 
 Cliente::Cliente(string nome, string cpfcnpj, string endereco, string fone)
 {
-	nome = nome;
-	cpfcnpj = cpfcnpj;
-	endereco = endereco;
-	fone = fone;
+	_nome = nome;
+	_cpfcnpj = cpfcnpj;
+	_endereco = endereco;
+	_fone = fone;
 }
 
 Cliente::Cliente()
@@ -19,33 +19,33 @@ Cliente::~Cliente()
 
 string Cliente::getNome() const
 {
-	return nome;
+	return _nome;
 }
-void Cliente::setNome(string Nome)
+void Cliente::setNome(string nome)
 {
-	nome = Nome;
+	_nome = nome;
 }
 string Cliente::getCPFCNPF() const
 {
-	return cpfcnpj;
+	return _cpfcnpj;
 }
-void Cliente::setCPFCNPF(string CPFCNPJ)
+void Cliente::setCPFCNPF(string cpfcnpj)
 {
-	cpfcnpj = CPFCNPJ;
+	_cpfcnpj = cpfcnpj;
 }
 string Cliente::getEndereco() const
 {
-	return endereco;
+	return _endereco;
 }
-void Cliente::setEndereco(string Endereco)
+void Cliente::setEndereco(string endereco)
 {
-	endereco = Endereco;
+	_endereco = endereco;
 }
 string Cliente::getFone() const
 {
-	return fone;
+	return _fone;
 }
 void Cliente::setFone(string Fone)
 {
-	fone = Fone;
+	_fone = Fone;
 }

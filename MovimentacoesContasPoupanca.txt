@@ -1,0 +1,1 @@
+0,1575070955,C,Deposito,4300,p,;0,1575071479,D,Transferencia para a conta 0,10,p,;0,1575071628,C,Transferencia da conta 0,500,p,;0,1575159003,C,Juros,47.9,p,;0,1575159029,C,Juros,48.379,p,;0,1575159044,C,Juros,48.8628,p,;0,1575159066,D,Transferencia para a conta 1,450,p,;0,1575159075,C,Juros,44.8514,p,;1,1575159066,C,Transferencia da conta 0,450,p,;1,1575159075,C,Juros,4.5,p,;

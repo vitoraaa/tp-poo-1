@@ -77,78 +77,84 @@ void apresentarMenu()
 	std::cout << "n - Listar contas\n";
 	std::cout << "o - Salvar dados\n";
 	std::cout << "p - Fechar a aplicacao\n";
+	try {
+		opcaoUsuario = getOpcaoUsuario();
 
-	opcaoUsuario = getOpcaoUsuario();
+		if (opcaoUsuario == "a") {
+			cadastrarCliente();
+		}
 
-	if (opcaoUsuario == "a") {
-		cadastrarCliente();
+		else if (opcaoUsuario == "b") {
+			criarConta();
+		}
+
+		else if (opcaoUsuario == "c") {
+			excluirCliente();
+		}
+
+		else if (opcaoUsuario == "d") {
+			excluirConta();
+		}
+
+		else if (opcaoUsuario == "e") {
+			efetuarDeposito();
+		}
+
+		else if (opcaoUsuario == "f") {
+			efetuarSaque();
+		}
+
+		else if (opcaoUsuario == "g") {
+			efetuarTransferencia();
+		}
+
+		else if (opcaoUsuario == "h") {
+			cobrarTarifa();
+		}
+
+		else if (opcaoUsuario == "i") {
+			cobrarCPMF();
+		}
+
+		else if (opcaoUsuario == "j") {
+			creditarJuros();
+		}
+		else if (opcaoUsuario == "k") {
+			obterSaldo();
+		}
+
+		else if (opcaoUsuario == "l") {
+			obterExtrato();
+		}
+
+		else if (opcaoUsuario == "m") {
+			listarClientes();
+		}
+
+		else if (opcaoUsuario == "n") {
+			listarContas();
+		}
+
+		else if (opcaoUsuario == "o") {
+			BancoServices.escreverDB();
+			apresentarMenu();
+		}
+
+		else if (opcaoUsuario == "p") {
+			fecharAplicacao();
+		}
+
+		else
+
+		{
+			cout << "Opcao Invalida\n";
+			system("pause");
+			apresentarMenu();
+		}
 	}
-
-	else if (opcaoUsuario == "b") {
-		criarConta();
-	}
-
-	else if (opcaoUsuario == "c") {
-		excluirCliente();
-	}
-
-	else if (opcaoUsuario == "d") {
-		excluirConta();
-	}
-
-	else if (opcaoUsuario == "e") {
-		efetuarDeposito();
-	}
-
-	else if (opcaoUsuario == "f") {
-		efetuarSaque();
-	}
-
-	else if (opcaoUsuario == "g") {
-		efetuarTransferencia();
-	}
-
-	else if (opcaoUsuario == "h") {
-		cobrarTarifa();
-	}
-
-	else if (opcaoUsuario == "i") {
-		cobrarCPMF();
-	}
-
-	else if (opcaoUsuario == "j") {
-		creditarJuros();
-	}
-	else if (opcaoUsuario == "k") {
-		obterSaldo();
-	}
-
-	else if (opcaoUsuario == "l") {
-		obterExtrato();
-	}
-
-	else if (opcaoUsuario == "m") {
-		listarClientes();
-	}
-
-	else if (opcaoUsuario == "n") {
-		listarContas();
-	}
-
-	else if (opcaoUsuario == "o") {
+	catch (exception) {
 		BancoServices.escreverDB();
-		apresentarMenu();
-	}
-
-	else if (opcaoUsuario == "p") {
-		fecharAplicacao();
-	}
-
-	else
-
-	{
-		cout << "Opcao Invalida\n";
-		system("pause");
+		BancoServices.lerClientesDB();
 		apresentarMenu();
 	}
 }
@@ -163,19 +169,19 @@ void cadastrarCliente() {
 	std::cout << "Cadastro de novo cliente\n";
 	std::cin.clear();
 
-	std::cout << "\nInsira o nome do cliente (sem espacos)\n";
+	std::cout << "\nInsira o nome do cliente (sem caracteres especiais ou espaco)\n";
 	std::cin >> nome;
 	std::cin.clear();
 
-	std::cout << "\nInsira o endereco do cliente (sem espacos)\n";
+	std::cout << "\nInsira o endereco do cliente (sem caracteres especiais ou espaco)\n";
 	std::cin >> endereco;
 	std::cin.clear();
 
-	std::cout << "\nInsira o CPF ou CNPJ do cliente (sem espacos)\n";
+	std::cout << "\nInsira o CPF ou CNPJ do cliente (sem caracteres especiais ou espaco)\n";
 	std::cin >> cpfcnpj;
 	std::cin.clear();
 
-	std::cout << "\nInsira o telefone do cliente (sem espacos) \n";
+	std::cout << "\nInsira o telefone do cliente (sem caracteres especiais ou espaco) \n";
 	std::cin >> fone;
 	std::cin.clear();
 

@@ -47,6 +47,7 @@ void Banco::cadastrarCliente(const Cliente& cliente)
 void Banco::creditarJuros()
 {
 	auto hoje = BancoServices.diaHoje();
+	if (hoje >= 29 && hoje <= 31)hoje = 28;
 
 	for (unsigned int i = 0; i < _contasPoupanca.size(); i++) {
 		auto index = _contasPoupanca[i].getIndexDiaBase(hoje);
@@ -236,7 +237,7 @@ void Banco::cobrarCPMF()
 {
 	for (unsigned int i = 0; i < _contasPoupanca.size(); i++) {
 		double valorCobrado = calcularCPMF(i, "p");
-		_contasPoupanca[i].debitarConta(valorCobrado, "Cobranca de CPMF");
+		if(valorCobrado>0)_contasPoupanca[i].debitarConta(valorCobrado, "Cobranca de CPMF");
 	}
 	for (unsigned int i = 0; i < _contasCorrentes.size(); i++) {
 		double valorCobrado = calcularCPMF(i, "cc");
